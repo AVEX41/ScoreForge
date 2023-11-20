@@ -1,5 +1,7 @@
 # ScoreForge
 
+## TODO
+- add route to login.html
 
 ## first time
 ````bash
@@ -25,6 +27,7 @@ docker-compose down
 
 ## Idea
 - Single page application
+- use grid for each component
 - user login and get a "dashboard"
 - track the progress of score -> specialized for shooting-score
 
