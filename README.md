@@ -1,4 +1,4 @@
-# perf_tracker
+# ScoreForge
 
 
 ## first time
@@ -26,10 +26,10 @@ docker-compose down
 ## Idea
 - Single page application
 - user login and get a "dashboard"
-- track the progress of score - specialized for shooting-score
+- track the progress of score -> specialized for shooting-score
 
 #### dashboard
-- shows all the performance-trackers.
+- shows all the performance-trackers. (scoreTables)
 - shows one favourite.
 - own widget that shows change in score.
 
@@ -39,9 +39,9 @@ docker-compose down
 - blue themed.
 - able for both darkmode and whitemode.
 
-#### Performace tracker
-- when clicked on a specific performance (label):
-- show a loading page
-- page should fetch a JSON to get information about the performance
-- shows a graph, that shows all the perfomances
-- able to see specific information about each "node", or perfomance score logged on a seperate part of the page (fetch on request).
+#### ScoreTable
+- when clicked on a specific ScoreTable:
+    - show a loading page
+    - page should fetch a JSON to get information about the performance
+    - shows a graph, that shows all the perfomances
+    - able to see specific information about each "node", or perfomance score logged on a seperate part of the page (fetch on request).
