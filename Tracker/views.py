@@ -17,6 +17,8 @@ def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
 
+    return render(request, "Tracker/index.html")
+
 
 def login_view(request):
     if request.method == "POST":

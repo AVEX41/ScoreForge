@@ -122,6 +122,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+# Set default auth user
+AUTH_USER_MODEL = "Tracker.User"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
