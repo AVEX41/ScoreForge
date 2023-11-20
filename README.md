@@ -1,7 +1,5 @@
 # perf_tracker
 
-link for startup: https://selectfrom.dev/how-to-configure-django-postgresql-environment-using-docker-8d5bb2db447c  
-delete later
 
 ## first time
 ````bash
