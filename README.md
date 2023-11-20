@@ -8,6 +8,7 @@
 #build
 docker-compose up -d --build
 # migrate and create superuser
+docker-compose exec web python3 manage.py makemigrations
 docker-compose exec web python3 manage.py migrate
 docker-compose exec web python3 manage.py createsuperuser
 ````
