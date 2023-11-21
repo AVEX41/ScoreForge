@@ -16,11 +16,11 @@ jobs:
     - name: Set up Docker Compose
       run: docker-compose -f docker-compose.yml up -d
 
-    #- name: Wait for services to start
-    #  run: docker-compose -f docker-compose.yml exec web bash -c 'while ! python3 manage.py check; do sleep 1; done'
+    - name: Wait for services to start
+      run: docker-compose -f docker-compose.yml exec web bash -c 'while ! python3 manage.py check; do sleep 1; done'
 
     - name: Run Tests
-      run: docker-compose -f docker-compose.yml exec web python3 manage.py test
+      run: docker-compose -f docker-compose.yml exec web python3 manage.py test --noinput
 
     - name: Stop Docker Compose
       run: docker-compose -f docker-compose.yml down
