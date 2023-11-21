@@ -1,12 +1,12 @@
-name: Django Test
+name: Django CI
 
 on:
   push:
     branches:
-      - main  # Change this to your main branch name
+      - main
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
     services:
@@ -22,14 +22,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build and run Docker Compose
-        run: docker-compose up -d
+      - name: Set up Docker
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
 
-      - name: Wait for services to start
-        run: docker-compose exec -T web sh -c 'while ! nc -z db 5432; do sleep 1; done;'
-
-      - name: Run tests
-        run: docker-compose exec web python3 manage.py test
-
-      - name: Stop Docker Compose
-        run: docker-compose down
+      - name: Build and run tests
+        run: |
+          docker-compose -f docker-compose.yml build
+          docker-compose -f docker-compose.yml run web python3 manage.py test
