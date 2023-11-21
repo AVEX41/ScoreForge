@@ -1,26 +1,43 @@
-name: Django Test
+name: Django Tests
 
 on:
   push:
     branches:
-      - main  # Change this to the branch you want to trigger the workflow on
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      - name: postgres
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Docker Compose
-      run: docker-compose -f docker-compose.yml up -d
+      - name: Set up Docker Compose
+        uses: docker/compose-action@v2
+        with:
+          compose-file: docker-compose.yml
+          compose-command: up
+          services: web
+        env:
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
 
-    - name: Wait for services to start
-      run: docker-compose -f docker-compose.yml exec web bash -c 'while ! python3 manage.py check; do sleep 1; done'
+      - name: Wait for Django to be ready
+        run: |
+          while true; do
+            docker-compose exec web python3 manage.py check && break
+            sleep 5
+          done
 
-    - name: Run Tests
-      run: docker-compose -f docker-compose.yml exec web python3 manage.py test --noinput
-
-    - name: Stop Docker Compose
-      run: docker-compose -f docker-compose.yml down
+      - name: Run Django Tests
+        run: docker-compose exec web python3 manage.py test
