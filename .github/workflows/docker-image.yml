@@ -15,5 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker-compose up -d --build
-      run: docker-compose exec web python3 manage.py test
+      run: |
+      docker-compose up -d --build
+      docker-compose exec web python3 manage.py test
