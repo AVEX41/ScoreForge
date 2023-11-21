@@ -1,36 +1,26 @@
-name: Django CI
+name: Django Test
 
 on:
   push:
     branches:
-      - main
+      - main  # Change this to the branch you want to trigger the workflow on
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-        # Add a delay before running the tests to allow PostgreSQL to start
-        # Adjust the delay based on the time it takes for your PostgreSQL service to be ready
-        options: --health-cmd "sleep 10 && pg_isready"
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - name: Set up Docker
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.x
+    - name: Set up Docker Compose
+      run: docker-compose -f docker-compose.yml up -d
 
-      - name: Build and run tests
-        run: |
-          docker-compose -f docker-compose.yml build
-          docker-compose -f docker-compose.yml run web python3 manage.py test
+    #- name: Wait for services to start
+    #  run: docker-compose -f docker-compose.yml exec web bash -c 'while ! python3 manage.py check; do sleep 1; done'
+
+    - name: Run Tests
+      run: docker-compose -f docker-compose.yml exec web python3 manage.py test
+
+    - name: Stop Docker Compose
+      run: docker-compose -f docker-compose.yml down
