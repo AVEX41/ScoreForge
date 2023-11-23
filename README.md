@@ -49,3 +49,59 @@ docker-compose down
     - page should fetch a JSON to get information about the performance
     - shows a graph, that shows all the perfomances
     - able to see specific information about each "node", or perfomance score logged on a seperate part of the page (fetch on request).
+
+
+#### JSON - ScoreTable
+- JSON should be able to be fetched from a URL.
+
+````` json
+
+{
+    "name": "name of the score",
+    "description": "description of the score",
+    "score": [
+        {
+            "date": "date of the performance",
+            "totalScore": "score of the performance",
+            "totalInners": "total inners",
+        },
+        {
+            "date": "date of the performance",
+            "score": "score of the performance",
+            "totalInners": "total inners",
+        },
+        {
+            "date": "date of the performance",
+            "score": "score of the performance",
+            "totalInners": "total inners",
+        }
+    ]
+}
+`````
+
+
+#### JSON - ShotDetails
+- JSON should be able to be fetched from a URL.
+
+````` json
+{
+    "date": "date of the performance",
+    "score": [
+        {
+            "shotNumber": "the number of the shot",
+            "score": "score of the performance",
+            "inner": "true/false",
+        },
+        {
+            "shotNumber": "the number of the shot",
+            "score": "score of the performance",
+            "inner": "true/false",
+        },
+        {
+            "shotNumber": "the number of the shot",
+            "score": "score of the performance",
+            "inner": "true/false",
+        }
+    ]
+}
+`````
