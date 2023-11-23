@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
+    profile_picture = models.BinaryField(null=True, blank=True)
+
     def __str__(self):
         return self.username
 

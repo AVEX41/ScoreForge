@@ -17,7 +17,17 @@ def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
 
-    return render(request, "Tracker/index.html")
+    user = request.user
+
+    # Retrieve the user's profile picture data
+    profile_picture_data = user.profile_picture
+
+    # Pass the profile picture data to the template
+    return render(
+        request,
+        "Tracker/index.html",
+        {"user": user, "profile_picture_data": profile_picture_data},
+    )
 
 
 def login_view(request):
