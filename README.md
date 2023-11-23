@@ -30,7 +30,7 @@ docker-compose down
 - Single page application
 - use grid for each component
 - user login and get a "dashboard"
-- track the progress of score -> specialized for shooting-score
+- In precision shooting, tracking progress is important to see if you are improving or not.
 
 #### dashboard
 - shows all the performance-trackers. (scoreTables)
