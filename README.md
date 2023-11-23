@@ -80,7 +80,7 @@ docker-compose down
 `````
 
 
-#### JSON - ShotDetails
+#### JSON - ScoreSet
 - JSON should be able to be fetched from a URL.
 
 ````` json
