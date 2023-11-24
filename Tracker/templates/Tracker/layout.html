@@ -61,12 +61,6 @@
                 </ul>
                 <hr>
                 <div class="d-flex">
-                    <!--<img src="img/profile_user.jpeg" class="img-fluid rounded me-2" width="50px" alt="">-->
-                    {% if user.profile_picture %}
-                        <img src="data:image/png;base64,{{ profile_picture_data }}" alt="Profile Picture" class="img-fluid rounded me-2" width="50px">
-                    {% else %}
-                        <p>No profile picture available</p>
-                    {% endif %}
                     <span>
                         <h6 class="mt-1 mb-0">{{ user.first_name }} {{ user.last_name }}</h6>
                         <small>{{ user.email }}</small>
