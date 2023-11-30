@@ -1,21 +1,17 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    push:
+    pull_request:
 
 jobs:
+    build:
+        runs-on: ubuntu-latest
 
-  build:
+        steps:
+            - uses: actions/checkout@v3
+            - name: Build the Docker image
+              run: docker-compose up --build -d
 
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker-compose up --build -d
-    
-    - name: Run tests
-      run: docker-compose run web python3 manage.py test
+            - name: Run tests
+              run: docker-compose run web python3 manage.py test

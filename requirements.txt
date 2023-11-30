@@ -3,5 +3,4 @@ Django
 sqlparse
 psycopg2
 tzdata
-djangorestframework
 Pillow

@@ -3,14 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import (
     HttpResponseRedirect,
+    JsonResponse,
 )
 from django.shortcuts import render
 from django.urls import reverse
 
 
 from .models import User, ScoreTable, ScoreSet, ScoreNode
-
-# Create your views here.
 
 
 def index(request):
@@ -24,6 +23,31 @@ def index(request):
         "Tracker/index.html",
         {"user": user},
     )
+
+
+def indexData(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    user = request.user
+
+    # Assuming you have a ScoreTable instance for the current user
+    score_table = user.score_tables.first()
+
+    if score_table:
+        # Serialize the score sets associated with the score table
+        serialized_score_sets = score_table.serialize_score_sets()
+
+        # Create a JSON response
+        response_data = {
+            "score_table_id": score_table.id,
+            "score_sets": serialized_score_sets,
+            # Add other data you want to include in the JSON response
+        }
+
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({"error": "No score table found for the user"})
 
 
 def login_view(request):
