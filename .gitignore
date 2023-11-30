@@ -3,5 +3,4 @@ __pycache__/
 *.pyc
 .idea/*
 .vscode/*
-generate-data/~$output_file.xlsx
-generate-data/output_file.xlsx
+generate-data/data/*
