@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Sample data for the chart
   const fetchData = async () => {
     try {
-      // Replace this with your actual data fetching logic using Adminkit
       const response = await fetch('/data/index');
       const data = await response.json();
 
