@@ -30,8 +30,6 @@ def indexData(request):
         return HttpResponseRedirect(reverse("login"))
 
     user = request.user
-
-    # Assuming you have a ScoreTable instance for the current user
     score_table = user.score_tables.first()
 
     if score_table:
@@ -42,7 +40,6 @@ def indexData(request):
         response_data = {
             "score_table_id": score_table.id,
             "score_sets": serialized_score_sets,
-            # Add other data you want to include in the JSON response
         }
 
         return JsonResponse(response_data)
