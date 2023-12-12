@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Sample data for the chart
   const fetchData = async () => {
     try {
-      const response = await fetch('/data/index');
+      const response = await fetch('/data/index/fav');
       const data = await response.json();
 
       const scoreSets = data.score_sets.map(scoreSet => ({

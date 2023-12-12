@@ -25,12 +25,14 @@ def index(request):
     )
 
 
-def indexData(request):
+# TODO: add all scoresets
+def indexDataFav(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
 
     user = request.user
-    score_table = user.score_tables.first()
+
+    score_table = user.score_tables.get(user_favourite=True)
 
     if score_table:
         # Serialize the score sets associated with the score table
@@ -39,12 +41,26 @@ def indexData(request):
         # Create a JSON response
         response_data = {
             "score_table_id": score_table.id,
+            "score_table_name": score_table.name,
             "score_sets": serialized_score_sets,
         }
 
         return JsonResponse(response_data)
     else:
-        return JsonResponse({"error": "No score table found for the user"})
+        return JsonResponse({"error": "No table favourited"})
+
+
+def setData(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    user = request.user
+    score_set = user.ScoreTable.score_sets.all()
+
+    if score_set:
+        pass
+
+    return HttpResponseRedirect(reverse("login"))
 
 
 def login_view(request):
