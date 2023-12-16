@@ -32,15 +32,13 @@ docker-compose down
 ## Idea
 
 -   Single page application
--   use grid for each component
--   user login and get a "dashboard"
+-   user login and get a "admin dashboard"
 -   In precision shooting, tracking progress is important to see if you are improving or not.
 
 #### dashboard
 
--   shows all the performance-trackers. (scoreTables)
--   shows one favourite.
--   own widget that shows change in score of favourite.
+-   shows the favourite performance-tracker. (scoreTables)
+-   own widget that shows change in score of favourite from last time.
 -   button to manage the favourited scoreTable's data.
 -   navigation bar button to manage scoreTables.
 
