@@ -10,9 +10,10 @@ class User(AbstractUser):
         return self.username
 
 
-class ScoreTable(models.Model):
+class CompetitionType(models.Model):
+    id = models.AutoField(primary_key=True)  # id
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="score_tables"
+        User, on_delete=models.CASCADE, related_name="competitionTypes"
     )  # adding the user
     timestamp = models.DateTimeField(auto_now_add=True)  # when
     name = models.CharField(max_length=100)  # name of the table
@@ -24,14 +25,15 @@ class ScoreTable(models.Model):
         return f"{self.name} - {self.user.username}"
 
     def serialize_score_sets(self):  # serializer
-        score_sets = self.score_sets.all()
+        score_sets = self.competitions.all()
         serialized_score_sets = serialize("json", score_sets)
         return json.loads(serialized_score_sets)
 
 
-class ScoreSet(models.Model):
+class Competition(models.Model):
+    id = models.AutoField(primary_key=True)  # id
     score_table = models.ForeignKey(
-        ScoreTable, on_delete=models.CASCADE, related_name="score_sets"
+        CompetitionType, on_delete=models.CASCADE, related_name="competitions"
     )  # linking to the mother/table
     timestamp = models.DateTimeField(auto_now_add=True)  # when
     nbr = models.IntegerField()  # the number identifier inside the table
@@ -43,12 +45,16 @@ class ScoreSet(models.Model):
         return f"ScoreSet - {self.id} - {self.timestamp}"
 
 
-class ScoreNode(models.Model):
+class CompetitionShot(models.Model):
+    id = models.AutoField(primary_key=True)  # id
     score_set = models.ForeignKey(
-        ScoreSet, on_delete=models.CASCADE, related_name="score_nodes"
+        Competition, on_delete=models.CASCADE, related_name="competitionShots"
     )  # linking to the mother/table
-    score = models.FloatField()  # the score of the shot
+    decimal_score = models.FloatField()  # the score of the shot in decimal
+    int_score = models.IntegerField()  # the score of the shot in int
     inner = models.BooleanField()  # was it an inner
 
     def __str__(self):
-        return f"ScoreNode - {self.id} - Score: {self.score}, Inner: {self.inner}"
+        return (
+            f"ScoreNode - {self.id} - Score: {self.decimal_score}, Inner: {self.inner}"
+        )

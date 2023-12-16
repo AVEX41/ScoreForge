@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import User, ScoreTable, ScoreSet, ScoreNode
+from .models import User, CompetitionType, Competition, CompetitionShot
 
 
 admin.site.register(User)
-admin.site.register(ScoreTable)
-admin.site.register(ScoreSet)
-admin.site.register(ScoreNode)
+admin.site.register(CompetitionType)
+admin.site.register(Competition)
+admin.site.register(CompetitionShot)

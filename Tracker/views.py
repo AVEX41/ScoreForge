@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 
-from .models import User, ScoreTable, ScoreSet, ScoreNode
+from .models import User, CompetitionType, Competition, CompetitionShot
 
 
 def index(request):
@@ -31,7 +31,7 @@ def indexDataFav(request):
 
     user = request.user
 
-    score_table = user.score_tables.get(user_favourite=True)
+    score_table = user.competitionTypes.get(user_favourite=True)
 
     if score_table:
         # Serialize the score sets associated with the score table
@@ -54,7 +54,7 @@ def setData(request):
         return HttpResponseRedirect(reverse("login"))
 
     user = request.user
-    score_set = user.ScoreTable.score_sets.all()
+    score_set = user.competitionTypes.competitions.all()
 
     if score_set:
         pass
