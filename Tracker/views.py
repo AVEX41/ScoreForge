@@ -25,7 +25,6 @@ def index(request):
     )
 
 
-# TODO: add all scoresets
 def indexDataFav(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
