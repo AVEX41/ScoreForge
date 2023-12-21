@@ -9,6 +9,11 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+    def serialize_competitions(self):
+        competitions = self.competitionTypes.all()
+        serialized_competitions = serialize("json", competitions)
+        return json.loads(serialized_competitions)
+
 
 class CompetitionType(models.Model):
     id = models.AutoField(primary_key=True)  # id

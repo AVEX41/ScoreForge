@@ -62,6 +62,16 @@ def setData(request):
     return HttpResponseRedirect(reverse("login"))
 
 
+def manage(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    user = request.user
+    competition_types = user.serialize_competitions()
+
+    return JsonResponse({"competition_types": competition_types})
+
+
 def login_view(request):
     if request.method == "POST":
         # Attempt to sign user in
