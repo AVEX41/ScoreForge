@@ -14,7 +14,6 @@
 	</head>
 	<body>
 		<div class="wrapper">
-			<script src="{% static 'Tracker/pages.js' %}"></script>
 			<!-- Sidebar -->
 			<nav id="sidebar" class="sidebar js-sidebar">
 				<div class="sidebar-content js-simplebar">
@@ -178,6 +177,11 @@
 					<div class="container-fluid p-0">{% block body %}{% endblock %}</div>
 				</main>
 			</div>
+		</div>
+		<div class="scripts">
+			<script src="{% static 'Tracker/pages.js' %}"></script>
+			<script src="{% static 'Tracker/manage.js' %}"></script>
+			<script src="{% static 'Tracker/index.js' %}"></script>
 		</div>
 	</body>
 </html>
