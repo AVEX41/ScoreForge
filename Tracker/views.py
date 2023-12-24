@@ -73,6 +73,9 @@ def manage(request):
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+
     if request.method == "POST":
         # Attempt to sign user in
         username = request.POST["username"]
