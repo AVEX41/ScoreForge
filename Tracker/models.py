@@ -1,4 +1,5 @@
 from django.core.serializers import serialize
+from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.http import JsonResponse
@@ -10,8 +11,18 @@ class User(AbstractUser):
         return self.username
 
     def serialize_competitions(self):  # returns all the competitionTypes
-        competitions = self.competitionTypes.all()
-        serialized_competitions = serialize("json", competitions)
+        competitions = self.competitionTypes.all().values(
+            "id", "timestamp", "name", "description", "shots_count"
+        )
+
+        # Convert datetime objects to strings
+        competitions = list(competitions)
+        for competition in competitions:
+            competition["timestamp"] = competition["timestamp"].strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+
+        serialized_competitions = json.dumps(competitions, cls=DjangoJSONEncoder)
         return json.loads(serialized_competitions)
 
 
