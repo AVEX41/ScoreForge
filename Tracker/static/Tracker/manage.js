@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("manage-side-button").addEventListener("click", getManageData);
-    //getManageData();
-
 });
 
 function getManageData() {
