@@ -1,5 +1,5 @@
 {% extends "Tracker/layout.html" %} {% load static %} {% block body %}
-<div id="index">
+<div id="dashboard" class="main-page">
 	<div class="row">
 		<div class="col-xl-6 col-xxl-5 d-flex">
 			<div class="w-100">
@@ -118,17 +118,17 @@
 	</div>
 	<h1>This is the body of the page</h1>
 </div>
-<div id="add">
+<div id="profile" class="main-page">
 	<h1>This is the add view</h1>
 </div>
-<div id="manage">
+<div id="manage" class="main-page">
 	<div class="container">
 		<div class="row justify-content-end">
 			<div class="col">
 				<h1>Manage</h1>
 			</div>
 			<div class="col-auto">
-				<button type="button" class="btn btn-primary btn-lg">New</button>
+				<button type="button" class="btn btn-primary btn-lg" id="manage-new-button">New</button>
 			</div>
 		</div>
 	</div>
@@ -151,5 +151,8 @@
 			</table>
 		</div>
 	</div>
+</div>
+<div id="new" class="main-page">
+	<h1>This is the new page</h1>
 </div>
 {% endblock %}
