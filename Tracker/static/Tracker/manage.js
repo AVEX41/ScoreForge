@@ -42,6 +42,9 @@ function getManageData() {
                     if (competition_type.hasOwnProperty(key)) {
                         const cell = row.insertCell();
                         cell.innerHTML = competition_type[key];
+                        if (key == "shots_count") {
+                            cell.classList.add("d-none", "d-md-table-cell");
+                        }
                     }
                 }
 
