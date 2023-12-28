@@ -16,19 +16,24 @@ function getManageData() {
             // Create table
             let table = document.getElementById("manage-table-content");
             table.innerHTML = "";
+            /*
             let row = table.insertRow(0);
             let cell = row.insertCell(0);
             cell.innerHTML = "<b>Username</b>";
             cell = row.insertCell(1);
             cell.innerHTML = "<b>First Name</b>";
+            */
 
             // add data to table
             data.competition_types.forEach((competition_type, index) => {
                 console.log(competition_type);
-                row = table.insertRow(index + 1); // remove + 1 afterwards
+                row = table.insertRow(index); // remove + 1 afterwards
             
                 // add cells
                 for (const key in competition_type) {
+                    if (key == "id") {
+                        continue;
+                    }
                     if (competition_type.hasOwnProperty(key)) {
                         cell = row.insertCell();
                         cell.innerHTML = competition_type[key];

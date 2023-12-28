@@ -12,7 +12,7 @@ class User(AbstractUser):
 
     def serialize_competitions(self):  # returns all the competitionTypes
         competitions = self.competitionTypes.all().values(
-            "id", "timestamp", "name", "description", "shots_count"
+            "id", "name", "timestamp", "description", "shots_count"
         )
 
         # Convert datetime objects to strings
