@@ -11,6 +11,11 @@
 		<script src="{% static 'Tracker/adminKit/app.js' %}"></script>
 		<!-- adminkit CSS -->
 		<link rel="stylesheet" href="{% static 'Tracker/adminKit/app.css' %}" />
+
+		<link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon_io/apple-touch-icon.png' %}" />
+		<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon_io/favicon-32x32.png' %}" />
+		<link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon_io/favicon-16x16.png' %}" />
+		<link rel="manifest" href="/site.webmanifest" />
 	</head>
 	<body>
 		<div class="wrapper">
@@ -153,8 +158,7 @@
 								</a>
 
 								<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-									<img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="{{ user.first_name }}" />
-									<span class="text-dark">{{ user.first_name }}</span>
+									<span class="text-dark">{{ user.first_name }} {{ user.last_name }}</span>
 								</a>
 								<div class="dropdown-menu dropdown-menu-end">
 									<a class="dropdown-item" href="pages-profile.html">
