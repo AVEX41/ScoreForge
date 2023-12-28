@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM loaded!, from manage.js");
-
     document.getElementById("manage-side-button").addEventListener("click", getManageData);
     //getManageData();
 
@@ -11,23 +9,30 @@ function getManageData() {
         try {
             const response = await fetch('/data/manage');
             const data = await response.json();
-            //console.log(data);
 
             // Create table
             let table = document.getElementById("manage-table-content");
+
+            if (table.rows.length > 0) {
+                // remove event listeners
+                for (let i = 0; i < table.rows.length; i++) {
+                    document.querySelectorAll(".manage-table-row").forEach(function(element) {
+                        element.removeEventListener("click", function() {
+                            clicked(i);
+                        });
+                    });
+                }
+            }
+
             table.innerHTML = "";
-            /*
-            let row = table.insertRow(0);
-            let cell = row.insertCell(0);
-            cell.innerHTML = "<b>Username</b>";
-            cell = row.insertCell(1);
-            cell.innerHTML = "<b>First Name</b>";
-            */
 
             // add data to table
             data.competition_types.forEach((competition_type, index) => {
+                const row = table.insertRow(index);
+                row.id = "manage-table-row-" + competition_type.id;
+                row.classList.add("manage-table-row");
+                row.addEventListener("click", function() {clicked(competition_type.id);});
                 console.log(competition_type);
-                row = table.insertRow(index); // remove + 1 afterwards
             
                 // add cells
                 for (const key in competition_type) {
@@ -35,15 +40,22 @@ function getManageData() {
                         continue;
                     }
                     if (competition_type.hasOwnProperty(key)) {
-                        cell = row.insertCell();
+                        const cell = row.insertCell();
                         cell.innerHTML = competition_type[key];
                     }
                 }
+
+
             });
 
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     }
+
+    function clicked(row) {
+        console.log("clicked " + row);
+    } 
+
     fetchManageData();
 }
