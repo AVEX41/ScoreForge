@@ -157,14 +157,15 @@
 			<h5 class="h3 d-inline align-middle">Add new</h5>
 		</div>
 		<div class="row">
-			<form method="post">
+			<form method="post" id="new-form">
+				{% csrf_token %}
 				<div class="col-12 col-lg-8">
 					<div class="card">
 						<div class="card-header">
 							<h5 class="card-title mb-0">Name</h5>
 						</div>
 						<div class="card-body">
-							<input type="text" class="form-control" placeholder="Input" name="name" />
+							<input type="text" class="form-control" placeholder="Input" name="name" required />
 						</div>
 					</div>
 
@@ -173,7 +174,7 @@
 							<h5 class="card-title mb-0">Amount of shots</h5>
 						</div>
 						<div class="card-body">
-							<input type="number" class="form-control" placeholder="Input" name="shot_count" />
+							<input type="number" class="form-control" placeholder="Input" name="shot_count" required />
 						</div>
 					</div>
 				</div>
@@ -183,7 +184,15 @@
 							<h5 class="card-title mb-0">Description</h5>
 						</div>
 						<div class="card-body">
-							<textarea class="form-control" rows="2" placeholder="Textarea" name="description"></textarea>
+							<textarea class="form-control" rows="2" placeholder="Textarea" name="description" required></textarea>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-header">
+							<h5 class="card-title mb-0">Submit</h5>
+						</div>
+						<div class="card-body">
+							<button type="submit" class="btn btn-primary">Submit</button>
 						</div>
 					</div>
 				</div>

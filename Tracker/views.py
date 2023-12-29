@@ -72,6 +72,38 @@ def manage(request):
     return JsonResponse({"competition_types": competition_types})
 
 
+def new(request):
+    if request.method == "POST":
+        try:
+            # Get data from request
+            data = request.POST
+        except KeyError:
+            return JsonResponse({"error": "Invalid data."})
+
+        try:
+            # Get user
+            user = request.user
+        except KeyError:
+            return JsonResponse({"error": "Invalid user."})
+
+        try:
+            # Create new competition type
+            competition_type = CompetitionType(
+                user=user,
+                name=data["name"],
+                description=data["description"],
+                shots_count=data["shot_count"],
+                user_favourite=False,
+            )
+            competition_type.save()
+        except KeyError:
+            return JsonResponse({"error": "Invalid competition type data."})
+
+        return JsonResponse({"message": "Competition type created successfully."})
+    else:
+        return JsonResponse({"error": "POST request required."})
+
+
 def login_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse("index"))
