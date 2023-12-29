@@ -49,12 +49,10 @@ docker-compose down
 -   navbar on left (if on wider device).
 -   else on top.
 -   blue themed.
--   able for both darkmode and whitemode.
 
 #### ScoreTable data
 
 -   when clicked on a specific ScoreTable:
-    -   show a loading page
-    -   page should fetch a JSON to get information about the performance
-    -   shows a graph, that shows all the perfomances
-    -   able to see specific information about each "node", or perfomance score logged on a seperate part of the page (fetch on request).
+    -   show a loading page.
+    -   page should fetch a JSON to get information about the performance.
+    -   shows a graph, that shows all the perfomances.
