@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 
-from .models import User, CompetitionType, Competition, CompetitionShot
+from .models import User, CompetitionType, Competition
 
 
 def index(request):
