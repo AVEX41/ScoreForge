@@ -1,68 +1,41 @@
 // TODO: make the buttons work, to show the correct page
 document.addEventListener("DOMContentLoaded", function () {
-    // hide all pages except index
-    document.getElementById("index").style.display = "block";
+    // hide all pages except dashboard
+    document.getElementById("dashboard").style.display = "block";
     document.getElementById("manage").style.display = "none";
-    document.getElementById("add").style.display = "none";
+    document.getElementById("profile").style.display = "none";
+    document.getElementById("new").style.display = "none";
 
 
     // adding event listeners to buttons
-    document.getElementById("dashboard-side-button").addEventListener("click", showIndex);
-    document.getElementById("manage-side-button").addEventListener("click", showManage);
-    document.getElementById("profile-side-button").addEventListener("click", showAdd);
-
-
-
-    // function to show index page
-    function showIndex() {
-        // removing active class from all buttons
-        document.querySelectorAll(".sidebar-item").forEach(function (button) {
-            if (button.classList.contains("active")) {
-                button.classList.remove("active");
-            }
-        });
-
-        // changing the active class
-        document.getElementById("dashboard-side-button").classList.add("active");
-
-        // shows index page
-        document.getElementById("index").style.display = "block";
-        document.getElementById("manage").style.display = "none";
-        document.getElementById("add").style.display = "none";
-    }
-
-    // function to show manage page
-    function showManage() {
-        // removing active class from all buttons
-        document.querySelectorAll(".sidebar-item").forEach(function (button) {
-            if (button.classList.contains("active")) {
-                button.classList.remove("active");
-            }
-        });
-
-        // changing the active class
-        document.getElementById("manage-side-button").classList.add("active");
-
-        document.getElementById("index").style.display = "none";
-        document.getElementById("manage").style.display = "block";
-        document.getElementById("add").style.display = "none";
-    }
-
-    // function to show add page
-    function showAdd() {
-        // removing active class from all buttons
-        document.querySelectorAll(".sidebar-item").forEach(function (button) {
-            if (button.classList.contains("active")) {
-                button.classList.remove("active");
-            }
-        });
-    
-        // changing the active class
-        document.getElementById("profile-side-button").classList.add("active");
-
-        document.getElementById("index").style.display = "none";
-        document.getElementById("manage").style.display = "none";
-        document.getElementById("add").style.display = "block";
-    }
-
+    document.getElementById("dashboard-side-button").addEventListener("click", function () {showPage("dashboard");});
+    document.getElementById("manage-side-button").addEventListener("click", function () {showPage("manage");});
+    document.getElementById("profile-side-button").addEventListener("click", function () {showPage("profile");});
+    document.getElementById("new-side-button").addEventListener("click", function () {showPage("new");});
+    document.getElementById("manage-new-button").addEventListener("click", function () {showPage("new");});
 });
+
+function showPage(page) {
+    console.log("showing " + page);
+    // removing active class from all buttons
+    document.querySelectorAll(".sidebar-item").forEach(function (button) {
+        if (button.classList.contains("active")) {
+            button.classList.remove("active");
+        }
+    });
+
+    // making all pages invisible
+    document.querySelectorAll(".main-page").forEach(function (page) {
+        page.style.display = "none";
+    });
+
+    // showing the correct page
+    document.getElementById(page).style.display = "block";
+
+    // changing the active class
+    try {
+    document.getElementById(page + "-side-button").classList.add("active");
+    } catch (error) {
+        
+    }
+}

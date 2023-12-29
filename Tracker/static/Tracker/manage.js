@@ -56,6 +56,7 @@ function getManageData() {
 
     function clicked(row) {
         console.log("clicked " + row);
+        showPage("comp-view");
     } 
 
     fetchManageData();

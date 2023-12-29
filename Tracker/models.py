@@ -54,23 +54,8 @@ class Competition(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)  # when
     nbr = models.IntegerField()  # the number identifier inside the table
     int_score = models.IntegerField()  # the total score of the set
-    decimal_score = models.FloatField()  # total score of the set in decimal
+    decimal_score = models.FloatField(blank=True)  # total score of the set in decimal
     total_inners = models.IntegerField()  # total inners
 
     def __str__(self):
         return f"ScoreSet - {self.id} - {self.timestamp}"
-
-
-class CompetitionShot(models.Model):
-    id = models.AutoField(primary_key=True)  # id
-    score_set = models.ForeignKey(
-        Competition, on_delete=models.CASCADE, related_name="competitionShots"
-    )  # linking to the mother/table
-    decimal_score = models.FloatField()  # the score of the shot in decimal
-    int_score = models.IntegerField()  # the score of the shot in int
-    inner = models.BooleanField()  # was it an inner
-
-    def __str__(self):
-        return (
-            f"ScoreNode - {self.id} - Score: {self.decimal_score}, Inner: {self.inner}"
-        )
