@@ -33,5 +33,9 @@ function showPage(page) {
     document.getElementById(page).style.display = "block";
 
     // changing the active class
+    try {
     document.getElementById(page + "-side-button").classList.add("active");
+    } catch (error) {
+        
+    }
 }
