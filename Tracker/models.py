@@ -54,7 +54,7 @@ class Competition(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)  # when
     nbr = models.IntegerField()  # the number identifier inside the table
     int_score = models.IntegerField()  # the total score of the set
-    decimal_score = models.FloatField()  # total score of the set in decimal
+    decimal_score = models.FloatField(blank=True)  # total score of the set in decimal
     total_inners = models.IntegerField()  # total inners
 
     def __str__(self):
