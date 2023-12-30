@@ -8,6 +8,7 @@ urlpatterns = [
     # JSON response
     path("data/index/fav", views.indexDataFav, name="indexData"),
     path("data/manage", views.manage, name="manage"),
+    path("data/manage/<str:view>", views.manageView, name="manageView"),
     # form submission
     path("form/new", views.new, name="new"),
     # Handle login

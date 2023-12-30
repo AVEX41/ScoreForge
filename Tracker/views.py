@@ -35,13 +35,13 @@ def indexDataFav(request):
 
     if score_table:
         # Serialize the score sets associated with the score table
-        serialized_score_sets = score_table.serialize_score_sets()
+        serialized_competitions = score_table.serialize_competition_type()
 
         # Create a JSON response
         response_data = {
             "score_table_id": score_table.id,
             "score_table_name": score_table.name,
-            "score_sets": serialized_score_sets,
+            "score_sets": serialized_competitions,
         }
 
         return JsonResponse(response_data)
@@ -70,6 +70,29 @@ def manage(request):
     competition_types = user.serialize_competitions()
 
     return JsonResponse({"competition_types": competition_types})
+
+
+def manageView(request, view):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    user = request.user
+
+    try:
+        score_table = user.competitionTypes.get(id=view)
+        score = score_table.serialize_competition_type()
+    except CompetitionType.DoesNotExist:
+        return JsonResponse({"error": "Invalid competition type."})
+
+    responseData = {
+        "competition_type_id": score_table.id,
+        "competition_type_name": score_table.name,
+        "competition_type_description": score_table.description,
+        "competition_type_shots_count": score_table.shots_count,
+        "competitions": score,
+    }
+
+    return JsonResponse(responseData)
 
 
 def new(request):

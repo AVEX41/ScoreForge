@@ -202,6 +202,63 @@
 	<script src="{% static 'Tracker/new.js' %}"></script>
 </div>
 <div id="comp-view" class="main-page">
-	<h1>This is the comp-view</h1>
+	<div class="container-fluid p-0">
+		<div class="row justify-content-end">
+			<div class="col">
+				<h1 id="comp-view-title">Competition View</h1>
+			</div>
+			<div class="col-auto">
+				<button type="button" class="btn btn-primary btn-lg" id="comp-view-new-btn">New</button>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xl-3 col-xxl-2">
+				<div class="card">
+					<div class="card-body">
+						<div class="row">
+							<div class="col mt-0">
+								<h5 class="card-title">Shot_count</h5>
+							</div>
+						</div>
+						<h1 class="mt-1 mb-3" id="comp-view-shots-count">Empty</h1>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-body">
+						<div class="row">
+							<div class="col mt-0">
+								<h5 class="card-title">Description</h5>
+							</div>
+						</div>
+						<h6 class="mt-1 mb-3" id="comp-view-description">14.212</h6>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-9 col-xxl-10">
+				<div class="d-flex">
+					<div class="card flex-fill">
+						<div class="card-header">
+							<h5 class="card-title mb-0">Competitions</h5>
+							<!-- Button show "new" tab -->
+						</div>
+						<table class="table table-hover my-0">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Start Date</th>
+									<th>Description</th>
+									<th class="d-none d-md-table-cell">shots</th>
+								</tr>
+							</thead>
+							<tbody id="comp-view-table-content"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="{% static 'Tracker/comp-view.js' %}"></script>
 </div>
 {% endblock %}

@@ -40,7 +40,7 @@ class CompetitionType(models.Model):
     def __str__(self):
         return f"{self.name} - {self.user.username}"
 
-    def serialize_score_sets(self):  # serializer
+    def serialize_competition_type(self):  # serializer
         score_sets = self.competitions.all()
         serialized_score_sets = serialize("json", score_sets)
         return json.loads(serialized_score_sets)

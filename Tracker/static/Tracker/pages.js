@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("manage").style.display = "none";
     document.getElementById("profile").style.display = "none";
     document.getElementById("new").style.display = "none";
+    document.getElementById("comp-view").style.display = "none";
 
 
     // adding event listeners to buttons
