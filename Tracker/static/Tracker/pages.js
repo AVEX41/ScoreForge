@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function showPage(page) {
-    console.log("showing " + page);
     // removing active class from all buttons
     document.querySelectorAll(".sidebar-item").forEach(function (button) {
         if (button.classList.contains("active")) {

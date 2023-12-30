@@ -30,7 +30,6 @@ function getManageData() {
                 row.id = "manage-table-row-" + competition_type.id;
                 row.classList.add("manage-table-row");
                 row.addEventListener("click", function() {comp_view(competition_type.id);});
-                console.log(competition_type);
             
                 // add cells
                 for (const key in competition_type) {

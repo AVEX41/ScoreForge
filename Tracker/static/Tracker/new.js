@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var formData = new FormData(form);
 
-        console.log(formData);
+
 
         // Use fetch to send the form data
         fetch("/form/new", {
@@ -21,8 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
             // Check if the request was successful (status 2xx)
             if (response.ok) {
                 // Handle the successful response here
-                console.log("Form submitted successfully!");
-                console.log(response)
             } else {
                 // Handle the error response here
                 console.error("Form submission failed with status: " + response.status);
