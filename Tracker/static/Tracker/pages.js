@@ -1,19 +1,13 @@
 // TODO: make the buttons work, to show the correct page
 document.addEventListener("DOMContentLoaded", function () {
-    // hide all pages except dashboard
-    document.getElementById("dashboard").style.display = "block";
-    document.getElementById("manage").style.display = "none";
-    document.getElementById("profile").style.display = "none";
-    document.getElementById("new").style.display = "none";
-    document.getElementById("comp-view").style.display = "none";
-
-
     // adding event listeners to buttons
     document.getElementById("dashboard-side-button").addEventListener("click", function () {showPage("dashboard");});
     document.getElementById("manage-side-button").addEventListener("click", function () {showPage("manage");});
     document.getElementById("profile-side-button").addEventListener("click", function () {showPage("profile");});
     document.getElementById("new-side-button").addEventListener("click", function () {showPage("new");});
     document.getElementById("manage-new-button").addEventListener("click", function () {showPage("new");});
+
+    showPage("dashboard");
 });
 
 function showPage(page) {

@@ -1,3 +1,11 @@
+document.addEventListener('DOMContentLoaded', function () {
+    // add event listener to the button
+    document.getElementById("comp-view-new-btn").addEventListener("click", () => {
+        //handle click
+        showPage("comp-new");
+    });
+});
+
 function comp_view(row) {
     // show page
     showPage("comp-view");
