@@ -101,13 +101,13 @@ def new(request):
             # Get data from request
             data = request.POST
         except KeyError:
-            return JsonResponse({"error": "Invalid data."})
+            return JsonResponse({"error": "Invalid data."}, status=400)
 
         try:
             # Get user
             user = request.user
         except KeyError:
-            return JsonResponse({"error": "Invalid user."})
+            return JsonResponse({"error": "Invalid user."}, status=400)
 
         try:
             # Create new competition type
@@ -120,11 +120,68 @@ def new(request):
             )
             competition_type.save()
         except KeyError:
-            return JsonResponse({"error": "Invalid competition type data."})
+            return JsonResponse({"error": "Invalid competition type data."}, status=400)
 
-        return JsonResponse({"message": "Competition type created successfully."})
+        return JsonResponse(
+            {"message": "Competition type created successfully."}, status=200
+        )
     else:
-        return JsonResponse({"error": "POST request required."})
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+
+def comp_new(request):
+    if request.method == "POST":
+        try:
+            # Get data from request
+            data = request.POST
+        except KeyError:
+            return JsonResponse({"error": "Invalid data."}, status=400)
+
+        try:
+            # Get user
+            user = request.user
+        except KeyError:
+            return JsonResponse({"error": "Invalid user."}, staus=400)
+
+        try:
+            # Get score table
+            comp_type = CompetitionType.objects.get(id=data["competition_type"])
+        except KeyError:
+            return JsonResponse({"error": "Invalid score table."}, status=400)
+
+        try:
+            # find the next nbr
+            comps = comp_type.competitions.all().order_by("-nbr")
+            # find the last used nbr
+            last_nbr = comps[0].nbr
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid competition data. can not find the number"},
+                status=400,
+            )
+
+        try:
+            # Create new competition type
+            competition = Competition(
+                score_table=comp_type,
+                nbr=last_nbr + 1,
+                int_score=data["int_score"],
+                total_inners=data["total_inners"],
+            )
+
+            competition.decimal_score = data["dec_score"]
+
+            competition.save()
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid competition data. Wrong parameters"}, status=400
+            )
+
+        return JsonResponse(
+            {"message": "Competition created successfully."}, status=200
+        )
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
 
 
 def login_view(request):

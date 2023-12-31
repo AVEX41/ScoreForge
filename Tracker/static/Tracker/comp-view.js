@@ -13,11 +13,9 @@ function comp_view(row) {
     // fetch data
     const fetchCompData = async () => {
         try {
-            console.log("/data/manage/" + row);
             const response = await fetch('/data/manage/' + row);
             const data = await response.json();
 
-            console.log(data);
             // add data to page
             
             document.getElementById("comp-view-title").innerHTML = data.competition_type_name;
@@ -28,18 +26,33 @@ function comp_view(row) {
             let table = document.getElementById("comp-view-table-content");
             let headers = ["int_score", "decimal_score", "total_inners", "timestamp"];
 
+            // clear table
+            table.innerHTML = "";
+
             // add data to table
             data.competitions.forEach((competition, index) => {
                 // use headers to add data to table
                 const row = table.insertRow(index);
-                console.log(competition)
                 headers.forEach((header, index) => {
                     // add cells
                     const cell1 = row.insertCell();
                     cell1.innerHTML = competition.fields[header];
-                    console.log("Header:" + competition.fields[header]);
                 });
             });
+
+            // remove old event listener if it exists
+            document.getElementById("comp-view-new-btn").removeEventListener("click", () => {
+                //handle click
+                comp_new(data)
+            });
+
+            // Add event listener to new-button with parameter
+            document.getElementById("comp-view-new-btn").addEventListener("click", () => {
+                //handle click
+                comp_new(data)
+            });
+            console.log("Added event listener to new-button: " + data);
+            console.log(data);
 
         } catch (error) {
             console.error('Error fetching data:', error);
