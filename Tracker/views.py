@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 
-from .models import User, CompetitionType, Competition
+from .models import User, PerformanceIndicator, DataPoint
 
 
 def index(request):
@@ -31,17 +31,17 @@ def indexDataFav(request):
 
     user = request.user
 
-    score_table = user.competitionTypes.get(user_favourite=True)
+    perf_indicator = user.PerformanceIndicators.get(user_favourite=True)
 
-    if score_table:
+    if perf_indicator:
         # Serialize the score sets associated with the score table
-        serialized_competitions = score_table.serialize_competition_type()
+        serialized_competitions = perf_indicator.serialize_performance_indicator()
 
         # Create a JSON response
         response_data = {
-            "score_table_id": score_table.id,
-            "score_table_name": score_table.name,
-            "score_sets": serialized_competitions,
+            "perf_indicator_id": perf_indicator.id,
+            "perf_indicator_id": perf_indicator.name,
+            "perf_indicator": serialized_competitions,
         }
 
         return JsonResponse(response_data)
@@ -49,27 +49,14 @@ def indexDataFav(request):
         return JsonResponse({"error": "No table favourited"})
 
 
-def setData(request):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse("login"))
-
-    user = request.user
-    score_set = user.competitionTypes.competitions.all()
-
-    if score_set:
-        pass
-
-    return HttpResponseRedirect(reverse("login"))
-
-
 def manage(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
 
     user = request.user
-    competition_types = user.serialize_competitions()
+    performance_indicators = user.serialize_performance_indicators()
 
-    return JsonResponse({"competition_types": competition_types})
+    return JsonResponse({"competition_types": performance_indicators})
 
 
 def manageView(request, view):
@@ -79,17 +66,17 @@ def manageView(request, view):
     user = request.user
 
     try:
-        score_table = user.competitionTypes.get(id=view)
-        score = score_table.serialize_competition_type()
-    except CompetitionType.DoesNotExist:
+        perf_indicator = user.PerformanceIndicators.get(id=view)
+        data_points = perf_indicator.serialize_performance_indicator()
+    except PerformanceIndicator.DoesNotExist:
         return JsonResponse({"error": "Invalid competition type."})
 
     responseData = {
-        "competition_type_id": score_table.id,
-        "competition_type_name": score_table.name,
-        "competition_type_description": score_table.description,
-        "competition_type_shots_count": score_table.shots_count,
-        "competitions": score,
+        "performance_indicator_id": perf_indicator.id,
+        "performance_indicator_name": perf_indicator.name,
+        "performance_indicator_description": perf_indicator.description,
+        "performance_indicator_shots_count": perf_indicator.shots_count,
+        "data_points": data_points,
     }
 
     return JsonResponse(responseData)
@@ -111,19 +98,21 @@ def new(request):
 
         try:
             # Create new competition type
-            competition_type = CompetitionType(
+            performance_indicator = PerformanceIndicator(
                 user=user,
                 name=data["name"],
                 description=data["description"],
                 shots_count=data["shot_count"],
                 user_favourite=False,
             )
-            competition_type.save()
+            performance_indicator.save()
         except KeyError:
-            return JsonResponse({"error": "Invalid competition type data."}, status=400)
+            return JsonResponse(
+                {"error": "Invalid performance indicator data."}, status=400
+            )
 
         return JsonResponse(
-            {"message": "Competition type created successfully."}, status=200
+            {"message": "performance indicator created successfully."}, status=200
         )
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
@@ -145,25 +134,27 @@ def comp_new(request):
 
         try:
             # Get score table
-            comp_type = CompetitionType.objects.get(id=data["competition_type"])
+            perf_indicator = PerformanceIndicator.objects.get(
+                id=data["competition_type"]
+            )
         except KeyError:
             return JsonResponse({"error": "Invalid score table."}, status=400)
 
         try:
             # find the next nbr
-            comps = comp_type.competitions.all().order_by("-nbr")
+            comps = perf_indicator.data_points.all().order_by("-nbr")
             # find the last used nbr
             last_nbr = comps[0].nbr
         except KeyError:
             return JsonResponse(
-                {"error": "Invalid competition data. can not find the number"},
+                {"error": "Invalid data point data. can not find the number"},
                 status=400,
             )
 
         try:
             # Create new competition type
-            competition = Competition(
-                score_table=comp_type,
+            competition = DataPoint(
+                score_table=perf_indicator,
                 nbr=last_nbr + 1,
                 int_score=data["int_score"],
                 total_inners=data["total_inners"],
@@ -174,7 +165,7 @@ def comp_new(request):
             competition.save()
         except KeyError:
             return JsonResponse(
-                {"error": "Invalid competition data. Wrong parameters"}, status=400
+                {"error": "Invalid data point data. Wrong parameters"}, status=400
             )
 
         return JsonResponse(
