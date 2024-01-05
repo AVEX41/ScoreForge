@@ -11,7 +11,7 @@ class User(AbstractUser):
         return self.username
 
     def serialize_performance_indicators(self):  # returns all the PerformanceIndicators
-        competitions = self.PerformanceIndicators.all().values(
+        competitions = self.performance_indicators.all().values(
             "id", "name", "timestamp", "description", "shots_count"
         )
 
@@ -29,7 +29,7 @@ class User(AbstractUser):
 class PerformanceIndicator(models.Model):
     id = models.AutoField(primary_key=True)  # id
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="Performance_indicators"
+        User, on_delete=models.CASCADE, related_name="performance_indicators"
     )  # adding the user
     timestamp = models.DateTimeField(auto_now_add=True)  # when
     name = models.CharField(max_length=100)  # name of the table

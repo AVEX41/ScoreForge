@@ -30,8 +30,10 @@ def indexDataFav(request):
         return HttpResponseRedirect(reverse("login"))
 
     user = request.user
-
-    perf_indicator = user.PerformanceIndicators.get(user_favourite=True)
+    try:
+        perf_indicator = user.performance_indicators.get(user_favourite=True)
+    except PerformanceIndicator.DoesNotExist:
+        return JsonResponse({"error": "No table favourited"})
 
     if perf_indicator:
         # Serialize the score sets associated with the score table
@@ -66,7 +68,7 @@ def manageView(request, view):
     user = request.user
 
     try:
-        perf_indicator = user.PerformanceIndicators.get(id=view)
+        perf_indicator = user.performance_indicators.get(id=view)
         data_points = perf_indicator.serialize_performance_indicator()
     except PerformanceIndicator.DoesNotExist:
         return JsonResponse({"error": "Invalid competition type."})

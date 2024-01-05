@@ -18,9 +18,9 @@ function comp_view(row) {
 
             // add data to page
             
-            document.getElementById("comp-view-title").innerHTML = data.competition_type_name;
-            document.getElementById("comp-view-description").innerHTML = data.competition_type_description;
-            document.getElementById("comp-view-shots-count").innerHTML = data.competition_type_shots_count;
+            document.getElementById("comp-view-title").innerHTML = data.performance_indicator_name;
+            document.getElementById("comp-view-description").innerHTML = data.performance_indicator_description;
+            document.getElementById("comp-view-shots-count").innerHTML = data.performance_indicator_shots_count;
 
             // Create table
             let table = document.getElementById("comp-view-table-content");
@@ -30,7 +30,7 @@ function comp_view(row) {
             table.innerHTML = "";
 
             // add data to table
-            data.competitions.forEach((competition, index) => {
+            data.data_points.forEach((competition, index) => {
                 // use headers to add data to table
                 const row = table.insertRow(index);
                 headers.forEach((header, index) => {
