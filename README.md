@@ -29,7 +29,6 @@ docker-compose down
 
 -   Single page application
 -   user login and get a "admin dashboard"
--   In precision shooting, tracking progress is important to see if you are improving or not.
 
 #### dashboard
 
