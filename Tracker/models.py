@@ -57,4 +57,4 @@ class DataPoint(models.Model):
     total_inners = models.IntegerField()  # total inners
 
     def __str__(self):
-        return f"ScoreSet - {self.id} - {self.timestamp}"
+        return f"DataPoint - {self.id} - {self.timestamp}"
