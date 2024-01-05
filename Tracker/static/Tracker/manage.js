@@ -16,7 +16,7 @@ function getManageData() {
                 for (let i = 0; i < table.rows.length; i++) {
                     document.querySelectorAll(".manage-table-row").forEach(function(element) {
                         element.removeEventListener("click", function() {
-                            clicked(i);
+                            comp_view(i);
                         });
                     });
                 }
@@ -29,8 +29,7 @@ function getManageData() {
                 const row = table.insertRow(index);
                 row.id = "manage-table-row-" + competition_type.id;
                 row.classList.add("manage-table-row");
-                row.addEventListener("click", function() {clicked(competition_type.id);});
-                console.log(competition_type);
+                row.addEventListener("click", function() {comp_view(competition_type.id);});
             
                 // add cells
                 for (const key in competition_type) {
@@ -53,11 +52,5 @@ function getManageData() {
             console.error('Error fetching data:', error);
         }
     }
-
-    function clicked(row) {
-        console.log("clicked " + row);
-        showPage("comp-view");
-    } 
-
     fetchManageData();
 }

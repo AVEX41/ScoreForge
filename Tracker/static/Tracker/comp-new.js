@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    var form = document.getElementById("new-form");
+    var form = document.getElementById("comp-new-form");
 
     form.onsubmit = function (event) {
         event.preventDefault();
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         // Use fetch to send the form data
-        fetch("/form/new", {
+        fetch("/form/comp-new", {
             method: "POST",
             body: formData,
             headers: {
@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
             // Check if the request was successful (status 2xx)
             if (response.ok) {
                 // Handle the successful response here
+                console.log("Form submission successful");
+                console.log(response.message);
             } else {
                 // Handle the error response here
                 console.error("Form submission failed with status: " + response.status);
@@ -33,3 +35,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+
+function comp_new(competition) {
+    console.log("comp_new called with param: " + competition);
+
+    showPage("comp-new");
+    document.getElementById("comp-new-title").innerHTML = competition.competition_type_name;
+
+    // add hidden data to form
+    document.getElementById("comp-new-hidden-field").value = competition.competition_type_id;
+
+}

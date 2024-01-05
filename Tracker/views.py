@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 
-from .models import User, CompetitionType, Competition
+from .models import User, PerformanceIndicator, DataPoint
 
 
 def index(request):
@@ -30,18 +30,20 @@ def indexDataFav(request):
         return HttpResponseRedirect(reverse("login"))
 
     user = request.user
+    try:
+        perf_indicator = user.performance_indicators.get(user_favourite=True)
+    except PerformanceIndicator.DoesNotExist:
+        return JsonResponse({"error": "No table favourited"})
 
-    score_table = user.competitionTypes.get(user_favourite=True)
-
-    if score_table:
+    if perf_indicator:
         # Serialize the score sets associated with the score table
-        serialized_score_sets = score_table.serialize_score_sets()
+        serialized_competitions = perf_indicator.serialize_performance_indicator()
 
         # Create a JSON response
         response_data = {
-            "score_table_id": score_table.id,
-            "score_table_name": score_table.name,
-            "score_sets": serialized_score_sets,
+            "perf_indicator_id": perf_indicator.id,
+            "perf_indicator_id": perf_indicator.name,
+            "perf_indicator": serialized_competitions,
         }
 
         return JsonResponse(response_data)
@@ -49,27 +51,37 @@ def indexDataFav(request):
         return JsonResponse({"error": "No table favourited"})
 
 
-def setData(request):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse("login"))
-
-    user = request.user
-    score_set = user.competitionTypes.competitions.all()
-
-    if score_set:
-        pass
-
-    return HttpResponseRedirect(reverse("login"))
-
-
 def manage(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
 
     user = request.user
-    competition_types = user.serialize_competitions()
+    performance_indicators = user.serialize_performance_indicators()
 
-    return JsonResponse({"competition_types": competition_types})
+    return JsonResponse({"competition_types": performance_indicators})
+
+
+def manageView(request, view):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    user = request.user
+
+    try:
+        perf_indicator = user.performance_indicators.get(id=view)
+        data_points = perf_indicator.serialize_performance_indicator()
+    except PerformanceIndicator.DoesNotExist:
+        return JsonResponse({"error": "Invalid competition type."})
+
+    responseData = {
+        "performance_indicator_id": perf_indicator.id,
+        "performance_indicator_name": perf_indicator.name,
+        "performance_indicator_description": perf_indicator.description,
+        "performance_indicator_shots_count": perf_indicator.shots_count,
+        "data_points": data_points,
+    }
+
+    return JsonResponse(responseData)
 
 
 def new(request):
@@ -78,30 +90,91 @@ def new(request):
             # Get data from request
             data = request.POST
         except KeyError:
-            return JsonResponse({"error": "Invalid data."})
+            return JsonResponse({"error": "Invalid data."}, status=400)
 
         try:
             # Get user
             user = request.user
         except KeyError:
-            return JsonResponse({"error": "Invalid user."})
+            return JsonResponse({"error": "Invalid user."}, status=400)
 
         try:
             # Create new competition type
-            competition_type = CompetitionType(
+            performance_indicator = PerformanceIndicator(
                 user=user,
                 name=data["name"],
                 description=data["description"],
                 shots_count=data["shot_count"],
                 user_favourite=False,
             )
-            competition_type.save()
+            performance_indicator.save()
         except KeyError:
-            return JsonResponse({"error": "Invalid competition type data."})
+            return JsonResponse(
+                {"error": "Invalid performance indicator data."}, status=400
+            )
 
-        return JsonResponse({"message": "Competition type created successfully."})
+        return JsonResponse(
+            {"message": "performance indicator created successfully."}, status=200
+        )
     else:
-        return JsonResponse({"error": "POST request required."})
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+
+def comp_new(request):
+    if request.method == "POST":
+        try:
+            # Get data from request
+            data = request.POST
+        except KeyError:
+            return JsonResponse({"error": "Invalid data."}, status=400)
+
+        try:
+            # Get user
+            user = request.user
+        except KeyError:
+            return JsonResponse({"error": "Invalid user."}, staus=400)
+
+        try:
+            # Get score table
+            perf_indicator = PerformanceIndicator.objects.get(
+                id=data["competition_type"]
+            )
+        except KeyError:
+            return JsonResponse({"error": "Invalid score table."}, status=400)
+
+        try:
+            # find the next nbr
+            comps = perf_indicator.data_points.all().order_by("-nbr")
+            # find the last used nbr
+            last_nbr = comps[0].nbr
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid data point data. can not find the number"},
+                status=400,
+            )
+
+        try:
+            # Create new competition type
+            competition = DataPoint(
+                score_table=perf_indicator,
+                nbr=last_nbr + 1,
+                int_score=data["int_score"],
+                total_inners=data["total_inners"],
+            )
+
+            competition.decimal_score = data["dec_score"]
+
+            competition.save()
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid data point data. Wrong parameters"}, status=400
+            )
+
+        return JsonResponse(
+            {"message": "Competition created successfully."}, status=200
+        )
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
 
 
 def login_view(request):

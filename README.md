@@ -29,10 +29,11 @@ docker-compose down
 
 -   Single page application
 -   user login and get a "admin dashboard"
+-   app where users can create personalized competitions, whether based on grades or other metrics, to track and measure their progress over time, promoting continuous improvement.
 
 #### dashboard
 
--   shows the favourite performance-tracker. (scoreTables)
+-   shows the favourite performance-tracker. (Competition)
 -   own widget that shows change in score of favourite from last time.
 -   button to manage the favourited scoreTable's data.
 -   navigation bar button to manage scoreTables.

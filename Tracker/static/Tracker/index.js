@@ -5,17 +5,17 @@ document.addEventListener("DOMContentLoaded", function () {
         const response = await fetch('/data/index/fav');
         const data = await response.json();
   
-        const scoreSets = data.score_sets.map(scoreSet => ({
-          x: scoreSet.fields.nbr, // Use "nbr" as horizontal value
-          y: scoreSet.fields.int_score, // Vertical value as int_score
+        const perf_indicator = data.perf_indicator.map((perf_indicator, index) => ({
+          x: index + 1, // Number each starting from one
+          y: perf_indicator.fields.int_score, // Vertical value as int_score
         }));
   
         const chartData = {
-          labels: scoreSets.map(scoreSet => scoreSet.x),
+          labels: perf_indicator.map(scoreSet => scoreSet.x),
           datasets: [
             {
               label: "Sample Data",
-              data: scoreSets,
+              data: perf_indicator,
               borderColor: "rgba(75, 192, 192, 1)",
               fill: false,
             },

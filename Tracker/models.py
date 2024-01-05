@@ -10,8 +10,8 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-    def serialize_competitions(self):  # returns all the competitionTypes
-        competitions = self.competitionTypes.all().values(
+    def serialize_performance_indicators(self):  # returns all the PerformanceIndicators
+        competitions = self.performance_indicators.all().values(
             "id", "name", "timestamp", "description", "shots_count"
         )
 
@@ -26,10 +26,10 @@ class User(AbstractUser):
         return json.loads(serialized_competitions)
 
 
-class CompetitionType(models.Model):
+class PerformanceIndicator(models.Model):
     id = models.AutoField(primary_key=True)  # id
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="competitionTypes"
+        User, on_delete=models.CASCADE, related_name="performance_indicators"
     )  # adding the user
     timestamp = models.DateTimeField(auto_now_add=True)  # when
     name = models.CharField(max_length=100)  # name of the table
@@ -40,22 +40,21 @@ class CompetitionType(models.Model):
     def __str__(self):
         return f"{self.name} - {self.user.username}"
 
-    def serialize_score_sets(self):  # serializer
-        score_sets = self.competitions.all()
+    def serialize_performance_indicator(self):  # serializer
+        score_sets = self.data_points.all().order_by("timestamp")
         serialized_score_sets = serialize("json", score_sets)
         return json.loads(serialized_score_sets)
 
 
-class Competition(models.Model):
+class DataPoint(models.Model):
     id = models.AutoField(primary_key=True)  # id
     score_table = models.ForeignKey(
-        CompetitionType, on_delete=models.CASCADE, related_name="competitions"
+        PerformanceIndicator, on_delete=models.CASCADE, related_name="data_points"
     )  # linking to the mother/table
     timestamp = models.DateTimeField(auto_now_add=True)  # when
-    nbr = models.IntegerField()  # the number identifier inside the table
     int_score = models.IntegerField()  # the total score of the set
     decimal_score = models.FloatField(blank=True)  # total score of the set in decimal
     total_inners = models.IntegerField()  # total inners
 
     def __str__(self):
-        return f"ScoreSet - {self.id} - {self.timestamp}"
+        return f"DataPoint - {self.id} - {self.timestamp}"
