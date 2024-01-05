@@ -143,21 +143,9 @@ def comp_new(request):
             return JsonResponse({"error": "Invalid score table."}, status=400)
 
         try:
-            # find the next nbr
-            comps = perf_indicator.data_points.all().order_by("-nbr")
-            # find the last used nbr
-            last_nbr = comps[0].nbr
-        except KeyError:
-            return JsonResponse(
-                {"error": "Invalid data point data. can not find the number"},
-                status=400,
-            )
-
-        try:
             # Create new competition type
             competition = DataPoint(
                 score_table=perf_indicator,
-                nbr=last_nbr + 1,
                 int_score=data["int_score"],
                 total_inners=data["total_inners"],
             )

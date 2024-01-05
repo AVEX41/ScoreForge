@@ -36,13 +36,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-function comp_new(competition) {
-    console.log("comp_new called with param: " + competition);
+function comp_new(data_point) {
+    console.log("comp_new called with param: " + data_point);
 
     showPage("comp-new");
-    document.getElementById("comp-new-title").innerHTML = competition.competition_type_name;
+    document.getElementById("comp-new-title").innerHTML = data_point.performance_indicator_name;
 
     // add hidden data to form
-    document.getElementById("comp-new-hidden-field").value = competition.competition_type_id;
+    document.getElementById("comp-new-hidden-field").value = data_point.performance_indicator_id;
 
 }
