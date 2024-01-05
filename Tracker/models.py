@@ -41,7 +41,7 @@ class PerformanceIndicator(models.Model):
         return f"{self.name} - {self.user.username}"
 
     def serialize_performance_indicator(self):  # serializer
-        score_sets = self.data_points.all()
+        score_sets = self.data_points.all().order_by("timestamp")
         serialized_score_sets = serialize("json", score_sets)
         return json.loads(serialized_score_sets)
 
@@ -52,7 +52,6 @@ class DataPoint(models.Model):
         PerformanceIndicator, on_delete=models.CASCADE, related_name="data_points"
     )  # linking to the mother/table
     timestamp = models.DateTimeField(auto_now_add=True)  # when
-    nbr = models.IntegerField()  # the number identifier inside the table
     int_score = models.IntegerField()  # the total score of the set
     decimal_score = models.FloatField(blank=True)  # total score of the set in decimal
     total_inners = models.IntegerField()  # total inners

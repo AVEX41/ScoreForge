@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const response = await fetch('/data/index/fav');
         const data = await response.json();
   
-        const perf_indicator = data.perf_indicator.map(perf_indicator => ({
-          x: perf_indicator.fields.nbr, // Use "nbr" as horizontal value
+        const perf_indicator = data.perf_indicator.map((perf_indicator, index) => ({
+          x: index + 1, // Number each starting from one
           y: perf_indicator.fields.int_score, // Vertical value as int_score
         }));
   
