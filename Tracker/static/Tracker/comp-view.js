@@ -20,11 +20,10 @@ function comp_view(row) {
             
             document.getElementById("comp-view-title").innerHTML = data.performance_indicator_name;
             document.getElementById("comp-view-description").innerHTML = data.performance_indicator_description;
-            document.getElementById("comp-view-shots-count").innerHTML = data.performance_indicator_shots_count;
 
             // Create table
             let table = document.getElementById("comp-view-table-content");
-            let headers = ["int_score", "decimal_score", "total_inners", "timestamp"];
+            let headers = ["score", "timestamp"];
 
             // clear table
             table.innerHTML = "";

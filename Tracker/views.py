@@ -77,7 +77,6 @@ def manageView(request, view):
         "performance_indicator_id": perf_indicator.id,
         "performance_indicator_name": perf_indicator.name,
         "performance_indicator_description": perf_indicator.description,
-        "performance_indicator_shots_count": perf_indicator.shots_count,
         "data_points": data_points,
     }
 
@@ -104,7 +103,6 @@ def new(request):
                 user=user,
                 name=data["name"],
                 description=data["description"],
-                shots_count=data["shot_count"],
                 user_favourite=False,
             )
             performance_indicator.save()
@@ -146,11 +144,8 @@ def comp_new(request):
             # Create new competition type
             competition = DataPoint(
                 score_table=perf_indicator,
-                int_score=data["int_score"],
-                total_inners=data["total_inners"],
+                score=data["score"],
             )
-
-            competition.decimal_score = data["dec_score"]
 
             competition.save()
         except KeyError:

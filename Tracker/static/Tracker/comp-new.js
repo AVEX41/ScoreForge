@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Handle the successful response here
                 console.log("Form submission successful");
                 console.log(response.message);
+                comp_view(formData.get("competition_type"));
             } else {
                 // Handle the error response here
                 console.error("Form submission failed with status: " + response.status);

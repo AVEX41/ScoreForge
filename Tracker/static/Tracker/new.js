@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", function () {
             // Check if the request was successful (status 2xx)
             if (response.ok) {
                 // Handle the successful response here
+                showPage("manage");
+                getManageData();
             } else {
                 // Handle the error response here
                 console.error("Form submission failed with status: " + response.status);

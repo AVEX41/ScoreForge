@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
         const perf_indicator = data.perf_indicator.map((perf_indicator, index) => ({
           x: index + 1, // Number each starting from one
-          y: perf_indicator.fields.int_score, // Vertical value as int_score
+          y: perf_indicator.fields.score, // Vertical value as int_score
         }));
   
         const chartData = {
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 beginAtZero: true,
                 title: {
                   display: true,
-                  text: 'int_score',
+                  text: 'score',
                 },
               },
             },
