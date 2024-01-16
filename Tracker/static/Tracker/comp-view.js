@@ -69,9 +69,9 @@ function comp_view(row) {
             labels: data_points.map(scoreSet => scoreSet.x),
             datasets: [
                 {
-                label: "Sample Data",
+                label: data.performance_indicator_name,
                 data: data_points,
-                borderColor: "rgba(75, 192, 192, 1)",
+                borderColor: "rgba(59, 126, 221, 1)",
                 fill: false,
                 },
             ],
