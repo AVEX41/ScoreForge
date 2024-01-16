@@ -26,10 +26,13 @@ function showPage(page) {
     // showing the correct page
     document.getElementById(page).style.display = "block";
 
-    // changing the active class
+    // changing the active class, if it is not a side button, then manage is active
     try {
-    document.getElementById(page + "-side-button").classList.add("active");
+        document.getElementById(page + "-side-button").classList.add("active");
     } catch (error) {
-        
+        document.getElementById("manage-side-button").classList.add("active");
     }
+
+
+
 }
