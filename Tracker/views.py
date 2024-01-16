@@ -160,6 +160,14 @@ def comp_new(request):
         return JsonResponse({"error": "POST request required."}, status=400)
 
 
+def edit(request):
+    ...
+
+
+def comp_edit(request):
+    ...
+
+
 def login_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse("index"))
