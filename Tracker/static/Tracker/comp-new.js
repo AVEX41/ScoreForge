@@ -41,9 +41,14 @@ function comp_new(data_point) {
     console.log("comp_new called with param: " + data_point);
 
     showPage("comp-new");
+
+    // add title to page
     document.getElementById("comp-new-title").innerHTML = data_point.performance_indicator_name;
 
     // add hidden data to form
     document.getElementById("comp-new-hidden-field").value = data_point.performance_indicator_id;
+
+    // remove old data from form
+    document.getElementById("comp-new-form").reset();
 
 }
