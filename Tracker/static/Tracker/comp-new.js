@@ -6,7 +6,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var formData = new FormData(form);
 
+        // Variable to check if is edit or new
+        is_new = true;
 
+        // fetch url
+        fetch_url = (is_new) ? "/form/comp-new" : "/form/comp-edit";
 
         // Use fetch to send the form data
         fetch("/form/comp-new", {
@@ -47,6 +51,7 @@ function comp_new(data_point) {
 
     // add hidden data to form
     document.getElementById("comp-new-hidden-field").value = data_point.performance_indicator_id;
+    document.getElementById("comp-new-submit-type").value = true;
 
     // remove old data from form
     document.getElementById("comp-new-form").reset();

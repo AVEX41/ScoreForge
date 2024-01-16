@@ -55,6 +55,7 @@
 		</div>
 		<div class="row">
 			<form method="post" id="new-form">
+				<input type="hidden" name="submit-type" id="new-submit-type" />
 				{% csrf_token %}
 				<div class="col-12 col-lg-8">
 					<div class="card">
@@ -156,6 +157,7 @@
 		<div class="row">
 			<form method="post" id="comp-new-form">
 				<input type="hidden" name="competition_type" id="comp-new-hidden-field" />
+				<input type="hidden" name="submit-type" id="comp-new-submit-type" />
 				{% csrf_token %}
 				<div class="col-12 col-lg-8">
 					<div class="card">
