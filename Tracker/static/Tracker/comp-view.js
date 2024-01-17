@@ -43,13 +43,13 @@ function comp_view(row) {
             // remove old event listener if it exists
             document.getElementById("comp-view-new-btn").removeEventListener("click", () => {
                 //handle click
-                comp_new(data)
+                comp_new(data, false)
             });
 
             // Add event listener to new-button with parameter
             document.getElementById("comp-view-new-btn").addEventListener("click", () => {
                 //handle click
-                comp_new(data)
+                comp_new(data, false)
             });
 
             // ------------------- Add event listener to edit-button -------------------

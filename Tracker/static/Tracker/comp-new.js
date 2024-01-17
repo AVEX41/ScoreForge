@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-function comp_new(data_point) {
+function comp_new(data_point, edit) {
     console.log("comp_new called with param: " + data_point);
 
     showPage("comp-new");
@@ -51,7 +51,8 @@ function comp_new(data_point) {
 
     // add hidden data to form
     document.getElementById("comp-new-hidden-field").value = data_point.performance_indicator_id;
-    document.getElementById("comp-new-submit-type").value = true;
+    document.getElementById("comp-new-edit-id").value = edit;
+    console.log("edit value:" + edit);
 
     // remove old data from form
     document.getElementById("comp-new-form").reset();
