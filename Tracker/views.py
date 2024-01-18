@@ -161,11 +161,71 @@ def comp_new(request):
 
 
 def edit(request):
-    ...
+    if request.method == "POST":
+        try:
+            # Get data from request
+            data = request.POST
+        except KeyError:
+            return JsonResponse({"error": "Invalid data."}, status=400)
+
+        try:
+            # Get user
+            user = request.user
+        except KeyError:
+            return JsonResponse({"error": "Invalid user."}, status=400)
+
+        try:
+            # Create new competition type
+            performance_indicator = PerformanceIndicator(
+                user=user,
+                name=data["name"],
+                description=data["description"],
+                user_favourite=False,
+            )
+            performance_indicator.save()
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid performance indicator data."}, status=400
+            )
+
+        return JsonResponse(
+            {"message": "performance indicator created successfully."}, status=200
+        )
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
 
 
 def comp_edit(request):
-    ...
+    if request.method == "POST":
+        try:
+            # Get data from request
+            data = request.POST
+        except KeyError:
+            return JsonResponse({"error": "Invalid data."}, status=400)
+
+        try:
+            # Get user
+            user = request.user
+        except KeyError:
+            return JsonResponse({"error": "Invalid user."}, staus=400)
+
+        try:
+            # Edit data point
+            data_point = DataPoint.objects.get(id=data["submit_type"])
+
+            data_point.score = data["score"]
+
+            data_point.save()
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid data point data. Wrong parameters"}, status=400
+            )
+
+        return JsonResponse(
+            {"message": "Competition created successfully."}, status=200
+        )
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
 
 
 def login_view(request):

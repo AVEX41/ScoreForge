@@ -157,7 +157,7 @@
 		<div class="row">
 			<form method="post" id="comp-new-form">
 				<input type="hidden" name="competition_type" id="comp-new-hidden-field" />
-				<input type="hidden" name="submit-type" id="comp-new-edit-id" />
+				<input type="hidden" name="submit_type" id="comp-new-edit-id" />
 				{% csrf_token %}
 				<div class="col-12 col-lg-8">
 					<div class="card">
@@ -165,7 +165,7 @@
 							<h5 class="card-title mb-0">Score</h5>
 						</div>
 						<div class="card-body">
-							<input type="number" class="form-control" placeholder="Input" name="score" required />
+							<input type="number" id="data_point_score_field" class="form-control" placeholder="Input" name="score" required />
 						</div>
 					</div>
 				</div>

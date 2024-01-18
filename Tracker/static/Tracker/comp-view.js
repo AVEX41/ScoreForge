@@ -21,9 +21,11 @@ function comp_view(row) {
             document.getElementById("comp-view-description").innerHTML = data.performance_indicator_description;
 
             // ------------------- Add data to table -------------------
-            // Create table
-            let table = document.getElementById("comp-view-table-content");
-            let headers = ["score", "timestamp"];
+            // Create table, and removing event listeners
+            let old_table = document.getElementById("comp-view-table-content"); 
+            table = old_table.cloneNode(true);
+            old_table.parentNode.replaceChild(table, old_table);
+            let headers = ["score", "timestamp", "edit"];
 
             // clear table
             table.innerHTML = "";
@@ -35,7 +37,16 @@ function comp_view(row) {
                 headers.forEach((header, index) => {
                     // add cells
                     const cell1 = row.insertCell();
-                    cell1.innerHTML = competition.fields[header];
+                    if(header !== "edit") {
+                        
+                        cell1.innerHTML = competition.fields[header];
+                    } else {
+                        var btn = document.createElement("button");
+                        btn.innerHTML = "Edit";
+                        btn.classList.add("edit-btn", "btn", "btn-primary");
+                        btn.id = "edit-btn-" + competition.pk;
+                        cell1.appendChild(btn);
+                    }
                 });
             });
 
@@ -53,7 +64,23 @@ function comp_view(row) {
             });
 
             // ------------------- Add event listener to edit-button -------------------
-            // TODO
+            // remove old event listeners if it exists
+            /*
+            document.querySelectorAll(".edit-btn").forEach((element, index) => {
+                element.removeEventListener("click", () => {
+                    comp_new(data, index); // index is numbering of the btn
+                });
+            });
+            */
+
+
+            // Add event listener to new-button with parameter
+
+            document.querySelectorAll(".edit-btn").forEach((element, index) => {
+                element.addEventListener("click", () => {
+                    comp_new(data, index); // index is numbering of the btn
+                });
+            });
 
             // ------------------- Add event listener to delete-button -------------------
             // TODO

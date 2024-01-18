@@ -5,9 +5,15 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
 
         var formData = new FormData(form);
+        value = document.getElementById("comp-new-edit-id").value
 
         // Variable to check if is edit or new
-        is_new = true;
+        if (value === false) {
+            is_new = true;
+        } else {
+            is_new = false;
+        }
+        
 
         // fetch url
         fetch_url = (is_new) ? "/form/comp-new" : "/form/comp-edit";
@@ -41,20 +47,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-function comp_new(data_point, edit) {
-    console.log("comp_new called with param: " + data_point);
+function comp_new(data, edit) {
+    console.log(data);
 
     showPage("comp-new");
-
-    // add title to page
-    document.getElementById("comp-new-title").innerHTML = data_point.performance_indicator_name;
-
-    // add hidden data to form
-    document.getElementById("comp-new-hidden-field").value = data_point.performance_indicator_id;
-    document.getElementById("comp-new-edit-id").value = edit;
-    console.log("edit value:" + edit);
 
     // remove old data from form
     document.getElementById("comp-new-form").reset();
 
+    // add title to page
+    document.getElementById("comp-new-title").innerHTML = data.performance_indicator_name;
+
+    // add hidden data to form
+    document.getElementById("comp-new-hidden-field").value = data.performance_indicator_id;
+    
+    if (edit === false) {
+        document.getElementById("comp-new-edit-id").value = edit;
+    } else {
+        // add hidden value
+        console.log("data-edit: " + data.data_points[edit].pk);
+        document.getElementById("comp-new-edit-id").value = data.data_points[edit].pk;
+
+        // prefill value
+        document.getElementById("data_point_score_field").value = data.data_points[edit].fields.score;
+    }
 }
