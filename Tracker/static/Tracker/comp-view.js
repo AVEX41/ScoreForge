@@ -64,16 +64,6 @@ function comp_view(row) {
             });
 
             // ------------------- Add event listener to edit-button -------------------
-            // remove old event listeners if it exists
-            /*
-            document.querySelectorAll(".edit-btn").forEach((element, index) => {
-                element.removeEventListener("click", () => {
-                    comp_new(data, index); // index is numbering of the btn
-                });
-            });
-            */
-
-
             // Add event listener to new-button with parameter
 
             document.querySelectorAll(".edit-btn").forEach((element, index) => {
