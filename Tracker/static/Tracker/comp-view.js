@@ -25,6 +25,8 @@ function comp_view(row) {
             let old_table = document.getElementById("comp-view-table-content"); 
             table = old_table.cloneNode(true);
             old_table.parentNode.replaceChild(table, old_table);
+
+            // Headers of table
             let headers = ["score", "timestamp", "edit"];
 
             // clear table

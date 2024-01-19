@@ -8,19 +8,11 @@ function getManageData() {
             const response = await fetch('/data/manage');
             const data = await response.json();
 
-            // Create table
-            let table = document.getElementById("manage-table-content");
-
-            if (table.rows.length > 0) {
-                // remove event listeners
-                for (let i = 0; i < table.rows.length; i++) {
-                    document.querySelectorAll(".manage-table-row").forEach(function(element) {
-                        element.removeEventListener("click", function() {
-                            comp_view(i);
-                        });
-                    });
-                }
-            }
+            // Create table, and removing event listeners
+            let old_table = document.getElementById("manage-table-content"); 
+            table = old_table.cloneNode(true);
+            old_table.parentNode.replaceChild(table, old_table);
+            //let table = document.getElementById("manage-table-content");
 
             table.innerHTML = "";
 
