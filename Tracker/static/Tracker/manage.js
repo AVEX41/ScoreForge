@@ -42,6 +42,14 @@ function getManageData() {
                     }
                 }
 
+                // Create edit button
+                const edit_cell = row.insertCell();
+                var btn = document.createElement("button");
+                btn.innerHTML = "Edit";
+                btn.classList.add("edit-btn", "btn", "btn-primary");
+                btn.id = "manage-edit-btn-" + competition_type.id;
+                edit_cell.appendChild(btn);
+
 
             });
 
