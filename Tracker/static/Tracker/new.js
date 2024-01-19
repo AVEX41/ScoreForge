@@ -35,3 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+function showNew(data, edit) {
+    showPage("new");
+}

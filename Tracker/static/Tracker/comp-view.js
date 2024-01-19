@@ -1,11 +1,3 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // add event listener to the button
-    document.getElementById("comp-view-new-btn").addEventListener("click", () => {
-        //handle click
-        showPage("comp-new");
-    });
-});
-
 function comp_view(row) {
     // show page
     showPage("comp-view");
@@ -53,11 +45,10 @@ function comp_view(row) {
             });
 
             // ------------------- Add event listener to new-button -------------------
-            // remove old event listener if it exists
-            document.getElementById("comp-view-new-btn").removeEventListener("click", () => {
-                //handle click
-                comp_new(data, false)
-            });
+            // remove event listener
+            let old_btn = document.getElementById("comp-view-new-btn"); 
+            btn = old_btn.cloneNode(true);
+            old_btn.parentNode.replaceChild(btn, old_btn);
 
             // Add event listener to new-button with parameter
             document.getElementById("comp-view-new-btn").addEventListener("click", () => {

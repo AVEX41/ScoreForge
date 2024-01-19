@@ -4,8 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("dashboard-side-button").addEventListener("click", function () {showPage("dashboard");});
     document.getElementById("manage-side-button").addEventListener("click", function () {showPage("manage");});
     document.getElementById("profile-side-button").addEventListener("click", function () {showPage("profile");});
-    document.getElementById("new-side-button").addEventListener("click", function () {showPage("new");});
-    document.getElementById("manage-new-button").addEventListener("click", function () {showPage("new");});
 
     showPage("dashboard");
 });
