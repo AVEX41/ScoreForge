@@ -6,12 +6,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var formData = new FormData(form);
         value = document.getElementById("comp-new-edit-id").value
+        console.log("value: " + value);
 
         // Variable to check if is edit or new
         if (value === false) {
             is_new = true;
+            console.log("true: value");
+
         } else {
             is_new = false;
+            console.log("false: value");
         }
         
 
@@ -19,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch_url = (is_new) ? "/form/comp-new" : "/form/comp-edit";
 
         // Use fetch to send the form data
-        fetch("/form/comp-new", {
+        fetch(fetch_url, {
             method: "POST",
             body: formData,
             headers: {
