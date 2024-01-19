@@ -128,6 +128,11 @@ function comp_view(row) {
             },
             };
     
+            // Replace the comp view
+            let old_chart = document.getElementById("chartjs-comp-view"); 
+            chart = old_chart.cloneNode(true);
+            old_chart.parentNode.replaceChild(chart, old_chart);
+
             // Get the canvas element
             const ctx = document.getElementById("chartjs-comp-view").getContext("2d");
     
