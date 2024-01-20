@@ -246,15 +246,10 @@ def delete(request):
 
         try:
             # Get object
-            performance_indicator = PerformanceIndicator.objects.get(
-                id=data["submit-type"]
-            )
+            performance_indicator = PerformanceIndicator.objects.get(id=data["item"])
 
-            # Edit object
-            performance_indicator.name = data["name"]
-            performance_indicator.description = data["description"]
-
-            performance_indicator.save()
+            # delete
+            performance_indicator.delete()
         except KeyError:
             return JsonResponse(
                 {"error": "Invalid performance indicator data."}, status=400

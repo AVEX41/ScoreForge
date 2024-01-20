@@ -9,6 +9,8 @@ function getManageData() {
             const response = await fetch('/data/manage');
             const data = await response.json();
 
+            // CSRF token
+            csrf_token = new FormData(document.getElementById("comp-new-form")).get("csrfmiddlewaretoken");
 
             // add event listener to new button
             document.getElementById("manage-new-button").addEventListener("click", function () {
@@ -65,6 +67,71 @@ function getManageData() {
 
                 // add Event Listener to show button
                 document.getElementById("manage-show-btn-" + competition_type.id).addEventListener("click", () => {comp_view(competition_type.id);});
+
+                // create form
+                var manage_delete_form = document.createElement("form");
+                manage_delete_form.id = "manage-delete-form-" + index;
+                manage_delete_form.classList.add("manage-delete-form");
+                manage_delete_form.method = "post"
+
+                // btn
+                var btn= document.createElement("button");
+                btn.innerHTML = "Delete";
+                btn.classList.add("manage-delete-btn", "btn", "btn-danger");
+                btn.id = "manage-delete-btn-" + competition_type.id;
+                btn.type = "submit";
+                manage_delete_form.appendChild(btn);
+
+                // Hidden ID
+                var h_val = document.createElement("input");
+                h_val.type = "hidden";
+                h_val.name = "item";
+                h_val.value = competition_type.id;
+                manage_delete_form.appendChild(h_val);
+
+                // CSRF token
+                var inpt_token = document.createElement("input");
+                inpt_token.type = "hidden";
+                inpt_token.name = "csrfmiddlewaretoken";
+                inpt_token.value = csrf_token;
+                manage_delete_form.appendChild(inpt_token);
+
+                // add to cell
+                edit_show_cell.appendChild(manage_delete_form);
+            });
+
+            // ------------------- Add event listener to delete-button -------------------
+            document.querySelectorAll(".manage-delete-form").forEach((element, index) => {
+                console.log(element);
+
+                element.onsubmit = function (event) {
+                    event.preventDefault();
+
+                    var formData = new FormData(element);
+
+                    fetch("/form/delete", {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-CSRFToken": formData.get("csrfmiddlewaretoken")
+                            // Add any other headers if needed
+                        }
+                    })
+                    .then(response => {
+                        // Check if the request was successful (status 2xx)
+                        if (response.ok) {
+                            // Handle the successful response here
+                            console.log("delete successfull");
+                        } else {
+                            // Handle the error response here
+                            console.error("Deletion returned with status: " + response.status);
+                        }
+                    })
+                    .catch(error => {
+                        // Handle network errors here
+                        console.error("Network error occurred while submitting the form:", error);
+                    });
+                }
             });
 
         } catch (error) {
