@@ -5,11 +5,24 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
 
         var formData = new FormData(form);
+        value = document.getElementById("new-submit-type").value
+
+        // Variable to check if is edit or new
+        if (value === "false") {
+            is_new = true;
+
+        } else {
+            is_new = false;
+        }
+        
+
+        // fetch url
+        fetch_url = (is_new) ? "/form/new" : "/form/edit";
 
 
 
         // Use fetch to send the form data
-        fetch("/form/new", {
+        fetch(fetch_url, {
             method: "POST",
             body: formData,
             headers: {
@@ -21,8 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Check if the request was successful (status 2xx)
             if (response.ok) {
                 // Handle the successful response here
-                showPage("manage");
-                getManageData();
+                showManage();
             } else {
                 // Handle the error response here
                 console.error("Form submission failed with status: " + response.status);
@@ -46,11 +58,10 @@ function showNew(data, edit) {
         document.getElementById("new-name-input").value = entity.name;
         document.getElementById("new-desc-input").value = entity.description;
 
-        console.log(data);
-        console.log(edit);
-        console.log(entity.id);
-
         document.getElementById("new-submit-type").value = entity.id;
-        document.get
+    } else {
+
+        document.getElementById("new-form").reset();
+        document.getElementById("new-submit-type").value = false;
     }
 }

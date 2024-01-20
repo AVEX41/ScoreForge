@@ -6,16 +6,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var formData = new FormData(form);
         value = document.getElementById("comp-new-edit-id").value
-        console.log("value: " + value);
 
         // Variable to check if is edit or new
-        if (value === false) {
+        if (value === "false") {
             is_new = true;
-            console.log("true: value");
 
         } else {
             is_new = false;
-            console.log("false: value");
         }
         
 
@@ -35,8 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
             // Check if the request was successful (status 2xx)
             if (response.ok) {
                 // Handle the successful response here
-                console.log("Form submission successful");
-                console.log(response.message);
                 comp_view(formData.get("competition_type"));
             } else {
                 // Handle the error response here
@@ -52,8 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function comp_new(data, edit) {
-    console.log(data);
-
     showPage("comp-new");
 
     // remove old data from form
@@ -69,7 +62,6 @@ function comp_new(data, edit) {
         document.getElementById("comp-new-edit-id").value = edit;
     } else {
         // add hidden value
-        console.log("data-edit: " + data.data_points[edit].pk);
         document.getElementById("comp-new-edit-id").value = data.data_points[edit].pk;
 
         // prefill value

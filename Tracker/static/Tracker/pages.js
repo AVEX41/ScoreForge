@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     // adding event listeners to buttons
     document.getElementById("dashboard-side-button").addEventListener("click", function () {showPage("dashboard");});
-    document.getElementById("manage-side-button").addEventListener("click", function () {showPage("manage");});
+    document.getElementById("manage-side-button").addEventListener("click", function () {showManage()});
     document.getElementById("profile-side-button").addEventListener("click", function () {showPage("profile");});
 
     showPage("dashboard");
@@ -30,7 +30,4 @@ function showPage(page) {
     } catch (error) {
         document.getElementById("manage-side-button").classList.add("active");
     }
-
-
-
 }

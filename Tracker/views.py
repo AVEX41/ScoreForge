@@ -175,13 +175,15 @@ def edit(request):
             return JsonResponse({"error": "Invalid user."}, status=400)
 
         try:
-            # Create new competition type
-            performance_indicator = PerformanceIndicator(
-                user=user,
-                name=data["name"],
-                description=data["description"],
-                user_favourite=False,
+            # Get object
+            performance_indicator = PerformanceIndicator.objects.get(
+                id=data["submit-type"]
             )
+
+            # Edit object
+            performance_indicator.name = data["name"]
+            performance_indicator.description = data["description"]
+
             performance_indicator.save()
         except KeyError:
             return JsonResponse(
