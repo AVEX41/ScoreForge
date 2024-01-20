@@ -37,4 +37,20 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 function showNew(data, edit) {
     showPage("new");
+
+    document.getElementById("new-header").innerHTML = (edit) ? "Edit" : "Add new";
+
+    if (edit !== false) {
+        entity = data.competition_types[edit]
+
+        document.getElementById("new-name-input").value = entity.name;
+        document.getElementById("new-desc-input").value = entity.description;
+
+        console.log(data);
+        console.log(edit);
+        console.log(entity.id);
+
+        document.getElementById("new-submit-type").value = entity.id;
+        document.get
+    }
 }

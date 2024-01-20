@@ -41,7 +41,7 @@
 						<th>Name</th>
 						<th>Start Date</th>
 						<th>Description</th>
-						<th>Edit</th>
+						<th>Edit / Show</th>
 					</tr>
 				</thead>
 				<tbody id="manage-table-content"></tbody>
@@ -52,7 +52,7 @@
 <div id="new" class="main-page">
 	<div class="container-fluid p-0">
 		<div class="mb-3">
-			<h5 class="h3 d-inline align-middle">Add new</h5>
+			<h5 id="new-header" class="h3 d-inline align-middle">Add new</h5>
 		</div>
 		<div class="row">
 			<form method="post" id="new-form">
@@ -64,7 +64,7 @@
 							<h5 class="card-title mb-0">Name</h5>
 						</div>
 						<div class="card-body">
-							<input type="text" class="form-control" placeholder="Input" name="name" required />
+							<input id="new-name-input" type="text" class="form-control" placeholder="Input" name="name" required />
 						</div>
 					</div>
 				</div>
@@ -74,7 +74,7 @@
 							<h5 class="card-title mb-0">Description</h5>
 						</div>
 						<div class="card-body">
-							<textarea class="form-control" rows="2" placeholder="Textarea" name="description" required></textarea>
+							<textarea id="new-desc-input" class="form-control" rows="2" placeholder="Textarea" name="description" required></textarea>
 						</div>
 					</div>
 					<div class="card">

@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const row = table.insertRow(index);
                     row.id = "manage-table-row-" + competition_type.id;
                     row.classList.add("manage-table-row");
-                    row.addEventListener("click", function() {comp_view(competition_type.id);});
+                    //row.addEventListener("click", () => {comp_view(competition_type.id);});
                 
                     // add cells
                     for (const key in competition_type) {
@@ -41,17 +41,30 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
 
-                    // Create edit button
-                    const edit_cell = row.insertCell();
-                    var btn = document.createElement("button");
-                    btn.innerHTML = "Edit";
-                    btn.classList.add("edit-btn", "btn", "btn-primary");
-                    btn.id = "manage-edit-btn-" + competition_type.id;
-                    edit_cell.appendChild(btn);
-
-                    // add Event Listener to edit button
+                    // create cell for both buttons
+                    const edit_show_cell = row.insertCell();
                     
+                    // Create edit button
+                    var edit_btn = document.createElement("button");
+                    edit_btn.innerHTML = "Edit";
+                    edit_btn.classList.add("new-edit-btn", "btn", "btn-primary");
+                    edit_btn.id = "manage-edit-btn-" + competition_type.id;
+                    edit_show_cell.appendChild(edit_btn);
+                    
+                    // add Event Listener to edit button
+                    document.getElementById("manage-edit-btn-" + competition_type.id).addEventListener("click", () => {
+                        showNew(data, index);
+                    });
+                    
+                    // create show button
+                    var show_btn = document.createElement("button");
+                    show_btn.innerHTML = "Show";
+                    show_btn.classList.add("new-edit-btn", "btn", "btn-info");
+                    show_btn.id = "manage-show-btn-" + competition_type.id;
+                    edit_show_cell.appendChild(show_btn);
 
+                    // add Event Listener to show button
+                    document.getElementById("manage-show-btn-" + competition_type.id).addEventListener("click", () => {comp_view(competition_type.id);});
                 });
 
             } catch (error) {
