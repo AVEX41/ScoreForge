@@ -230,6 +230,75 @@ def comp_edit(request):
         return JsonResponse({"error": "POST request required."}, status=400)
 
 
+def delete(request):
+    if request.method == "POST":
+        try:
+            # Get data from request
+            data = request.POST
+        except KeyError:
+            return JsonResponse({"error": "Invalid data."}, status=400)
+
+        try:
+            # Get user
+            user = request.user
+        except KeyError:
+            return JsonResponse({"error": "Invalid user."}, status=400)
+
+        try:
+            # Get object
+            performance_indicator = PerformanceIndicator.objects.get(
+                id=data["submit-type"]
+            )
+
+            # Edit object
+            performance_indicator.name = data["name"]
+            performance_indicator.description = data["description"]
+
+            performance_indicator.save()
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid performance indicator data."}, status=400
+            )
+
+        return JsonResponse(
+            {"message": "performance indicator created successfully."}, status=200
+        )
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+
+def comp_delete(request):
+    if request.method == "POST":
+        try:
+            # Get data from request
+            data = request.POST
+        except KeyError:
+            return JsonResponse({"error": "Invalid data."}, status=400)
+
+        try:
+            # Get user
+            user = request.user
+        except KeyError:
+            return JsonResponse({"error": "Invalid user."}, staus=400)
+
+        try:
+            # Edit data point
+            data_point = DataPoint.objects.get(id=data["item"])
+
+            # delete
+            data_point.delete()
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid data point data. Wrong parameters"}, status=400
+            )
+
+        return JsonResponse(
+            {"message": "Competition created successfully."}, status=200
+        )
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+
 def login_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse("index"))

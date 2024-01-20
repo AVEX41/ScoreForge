@@ -16,6 +16,9 @@ urlpatterns = [
     # edit
     path("form/edit", views.edit, name="edit"),
     path("form/comp-edit", views.comp_edit, name="comp_edit"),
+    # delete
+    path("form/delete", views.delete, name="delete"),
+    path("form/comp-delete", views.comp_delete, name="comp_delete"),
     # --- Handle login ---
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),

@@ -8,6 +8,9 @@ function comp_view(row) {
             const response = await fetch('/data/manage/' + row);
             const data = await response.json();
 
+            // CSRF token
+            csrf_token = new FormData(document.getElementById("comp-new-form")).get("csrfmiddlewaretoken");
+
             // add data to page
             document.getElementById("comp-view-title").innerHTML = data.performance_indicator_name;
             document.getElementById("comp-view-description").innerHTML = data.performance_indicator_description;
@@ -19,10 +22,11 @@ function comp_view(row) {
             old_table.parentNode.replaceChild(table, old_table);
 
             // Headers of table
-            let headers = ["score", "timestamp", "edit"];
+            let headers = ["score", "timestamp", "edit", "delete"];
 
             // clear table
             table.innerHTML = "";
+            console.log(data)
 
             // add data to table
             data.data_points.forEach((competition, index) => {
@@ -30,16 +34,48 @@ function comp_view(row) {
                 const row = table.insertRow(index);
                 headers.forEach((header, index) => {
                     // add cells
-                    const cell1 = row.insertCell();
-                    if(header !== "edit") {
-                        
-                        cell1.innerHTML = competition.fields[header];
+                    const cell = row.insertCell();
+                    if (header !== "edit" && header !== "delete") {
+                        cell.innerHTML = competition.fields[header];
                     } else {
-                        var btn = document.createElement("button");
-                        btn.innerHTML = "Edit";
-                        btn.classList.add("edit-btn", "btn", "btn-primary");
-                        btn.id = "edit-btn-" + competition.pk;
-                        cell1.appendChild(btn);
+                        if (header === "edit") {
+                            var btn = document.createElement("button");
+                            btn.innerHTML = "Edit";
+                            btn.classList.add("edit-btn", "btn", "btn-primary");
+                            btn.id = "edit-btn-" + competition.pk;
+                            cell.appendChild(btn);
+                        } else if (header === "delete") {
+                            // create form
+                            var delete_form = document.createElement("form");
+                            delete_form.id = "delete-form-" + index;
+                            delete_form.classList.add("delete-form");
+                            delete_form.method = "post"
+
+                            // btn
+                            var btn= document.createElement("button");
+                            btn.innerHTML = "Delete";
+                            btn.classList.add("delete-btn", "btn", "btn-danger");
+                            btn.id = "delete-btn-" + competition.pk;
+                            btn.type = "submit";
+                            delete_form.appendChild(btn);
+
+                            // Hidden ID
+                            var h_val = document.createElement("input");
+                            h_val.type = "hidden";
+                            h_val.name = "item";
+                            h_val.value = competition.pk;
+                            delete_form.appendChild(h_val);
+
+                            // CSRF token
+                            var inpt_token = document.createElement("input");
+                            inpt_token.type = "hidden";
+                            inpt_token.name = "csrfmiddlewaretoken";
+                            inpt_token.value = csrf_token;
+                            delete_form.appendChild(inpt_token);
+
+                            // add to cell
+                            cell.appendChild(delete_form);
+                        }
                     }
                 });
             });
@@ -66,7 +102,38 @@ function comp_view(row) {
             });
 
             // ------------------- Add event listener to delete-button -------------------
-            // TODO
+            document.querySelectorAll(".delete-form").forEach((element, index) => {
+                console.log(element);
+
+                element.onsubmit = function (event) {
+                    event.preventDefault();
+
+                    var formData = new FormData(element);
+
+                    fetch("/form/comp-delete", {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-CSRFToken": formData.get("csrfmiddlewaretoken")
+                            // Add any other headers if needed
+                        }
+                    })
+                    .then(response => {
+                        // Check if the request was successful (status 2xx)
+                        if (response.ok) {
+                            // Handle the successful response here
+                            console.log("delete successfull");
+                        } else {
+                            // Handle the error response here
+                            console.error("Deletion returned with status: " + response.status);
+                        }
+                    })
+                    .catch(error => {
+                        // Handle network errors here
+                        console.error("Network error occurred while submitting the form:", error);
+                    });
+                }
+            });
 
             // ------------------- Add data to graph -------------------
     
