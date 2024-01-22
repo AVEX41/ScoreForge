@@ -16,7 +16,47 @@
 	</div>
 </div>
 <div id="profile" class="main-page">
-	<h1>This is the profile view</h1>
+	<div class="container-fluid p-0">
+		<div class="mb-3">
+			<h5 class="h3 d-inline align-middle">Profile</h5>
+		</div>
+		<div class="row">
+			<div class="col-12 col-lg-6">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title mb-0">Full name</h5>
+					</div>
+					<div class="card-body"><h3>{{ user.first_name }} {{ user.last_name }}</h3></div>
+				</div>
+			</div>
+			<div class="col-12 col-lg-6">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title mb-0">Email</h5>
+					</div>
+					<div class="card-body"><h3>{{ user.email }}</h3></div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-lg-6">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title mb-0">Username</h5>
+					</div>
+					<div class="card-body"><h3>{{ user }}</h3></div>
+				</div>
+			</div>
+			<div class="col-12 col-lg-6">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title mb-0">Password</h5>
+					</div>
+					<div class="card-body"><button id="new-password-btn" class="btn btn-primary">Change password</button></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <div id="manage" class="main-page">
 	<div class="container">
