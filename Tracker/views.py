@@ -294,6 +294,22 @@ def comp_delete(request):
         return JsonResponse({"error": "POST request required."}, status=400)
 
 
+def usr_name(request):
+    ...
+
+
+def usr_usrname(request):
+    ...
+
+
+def usr_email(request):
+    ...
+
+
+def usr_pword(request):
+    ...
+
+
 def login_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse("index"))

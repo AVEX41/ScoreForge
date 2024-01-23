@@ -19,6 +19,11 @@ urlpatterns = [
     # delete
     path("form/delete", views.delete, name="delete"),
     path("form/comp-delete", views.comp_delete, name="comp_delete"),
+    # user edit
+    path("form/usr/name", views.usr_name, name="usr_name"),
+    path("form/usr/usrname", views.usr_usrname, name="usr_usrname"),
+    path("form/usr/email", views.usr_email, name="usr_email"),
+    path("form/usr/pword", views.usr_pword, name="usr_pword"),
     # --- Handle login ---
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
