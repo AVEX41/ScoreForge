@@ -317,15 +317,78 @@ def usr_name(request):
 
 
 def usr_usrname(request):
-    ...
+    if request.method == "POST":
+        try:
+            # Get data from request
+            data = request.POST
+        except KeyError:
+            return JsonResponse({"error": "Invalid data."}, status=400)
+        try:
+            # Get user
+            user = request.user
+        except KeyError:
+            return JsonResponse({"error": "Invalid user."}, staus=400)
+        try:
+            user.username = data["username"]
+
+            user.save()
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid data point data. Wrong parameters"}, status=400
+            )
+        return JsonResponse({"message": "User edited successfully."}, status=200)
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
 
 
 def usr_email(request):
-    ...
+    if request.method == "POST":
+        try:
+            # Get data from request
+            data = request.POST
+        except KeyError:
+            return JsonResponse({"error": "Invalid data."}, status=400)
+        try:
+            # Get user
+            user = request.user
+        except KeyError:
+            return JsonResponse({"error": "Invalid user."}, staus=400)
+        try:
+            user.email = data["email"]
+
+            user.save()
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid data point data. Wrong parameters"}, status=400
+            )
+        return JsonResponse({"message": "User edited successfully."}, status=200)
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
 
 
 def usr_pword(request):
-    ...
+    if request.method == "POST":
+        try:
+            # Get data from request
+            data = request.POST
+        except KeyError:
+            return JsonResponse({"error": "Invalid data."}, status=400)
+        try:
+            # Get user
+            user = request.user
+        except KeyError:
+            return JsonResponse({"error": "Invalid user."}, staus=400)
+        try:
+            user.set_password(data["password"])
+
+            user.save()
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid data point data. Wrong parameters"}, status=400
+            )
+        return JsonResponse({"message": "User edited successfully."}, status=200)
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
 
 
 def login_view(request):
