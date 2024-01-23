@@ -33,7 +33,7 @@ def indexDataFav(request):
     try:
         perf_indicator = user.performance_indicators.get(user_favourite=True)
     except PerformanceIndicator.DoesNotExist:
-        return JsonResponse({"error": "No table favourited"})
+        return JsonResponse({"error": "No Performance indicator favourited."})
 
     if perf_indicator:
         # Serialize the score sets associated with the score table
@@ -48,7 +48,7 @@ def indexDataFav(request):
 
         return JsonResponse(response_data)
     else:
-        return JsonResponse({"error": "No table favourited"})
+        return JsonResponse({"error": "No Performance indicator favourited."})
 
 
 def manage(request):
@@ -71,7 +71,7 @@ def manageView(request, view):
         perf_indicator = user.performance_indicators.get(id=view)
         data_points = perf_indicator.serialize_performance_indicator()
     except PerformanceIndicator.DoesNotExist:
-        return JsonResponse({"error": "Invalid competition type."})
+        return JsonResponse({"error": "Invalid Performance indicator."})
 
     responseData = {
         "performance_indicator_id": perf_indicator.id,
@@ -138,7 +138,7 @@ def comp_new(request):
                 id=data["competition_type"]
             )
         except KeyError:
-            return JsonResponse({"error": "Invalid score table."}, status=400)
+            return JsonResponse({"error": "Invalid perfomance indicator."}, status=400)
 
         try:
             # Create new competition type
@@ -191,7 +191,7 @@ def edit(request):
             )
 
         return JsonResponse(
-            {"message": "performance indicator created successfully."}, status=200
+            {"message": "performance indicator edited successfully."}, status=200
         )
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
@@ -223,9 +223,7 @@ def comp_edit(request):
                 {"error": "Invalid data point data. Wrong parameters"}, status=400
             )
 
-        return JsonResponse(
-            {"message": "Competition created successfully."}, status=200
-        )
+        return JsonResponse({"message": "datapoint edited successfully."}, status=200)
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
 
@@ -256,7 +254,7 @@ def delete(request):
             )
 
         return JsonResponse(
-            {"message": "performance indicator created successfully."}, status=200
+            {"message": "performance indicator deleted successfully."}, status=200
         )
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
@@ -287,15 +285,35 @@ def comp_delete(request):
                 {"error": "Invalid data point data. Wrong parameters"}, status=400
             )
 
-        return JsonResponse(
-            {"message": "Competition created successfully."}, status=200
-        )
+        return JsonResponse({"message": "DataPoint delete successfully."}, status=200)
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
 
 
 def usr_name(request):
-    ...
+    if request.method == "POST":
+        try:
+            # Get data from request
+            data = request.POST
+        except KeyError:
+            return JsonResponse({"error": "Invalid data."}, status=400)
+        try:
+            # Get user
+            user = request.user
+        except KeyError:
+            return JsonResponse({"error": "Invalid user."}, staus=400)
+        try:
+            user.first_name = data["first_name"]
+            user.last_name = data["last_name"]
+
+            user.save()
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid data point data. Wrong parameters"}, status=400
+            )
+        return JsonResponse({"message": "User edited successfully."}, status=200)
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
 
 
 def usr_usrname(request):
