@@ -103,7 +103,6 @@ function comp_view(row) {
 
             // ------------------- Add event listener to delete-button -------------------
             document.querySelectorAll(".delete-form").forEach((element, index) => {
-                console.log(element);
 
                 element.onsubmit = function (event) {
                     event.preventDefault();

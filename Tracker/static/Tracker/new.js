@@ -59,6 +59,9 @@ function showNew(data, edit) {
         document.getElementById("new-desc-input").value = entity.description;
 
         document.getElementById("new-submit-type").value = entity.id;
+
+        // create delete button
+        
     } else {
 
         document.getElementById("new-form").reset();

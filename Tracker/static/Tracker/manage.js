@@ -33,42 +33,43 @@ function getManageData() {
                 //row.addEventListener("click", () => {comp_view(competition_type.id);});
             
                 // add cells
+                const show_cell = row.insertCell();
+                // create show button
+                var show_btn = document.createElement("button");
+                show_btn.innerHTML = "Show";
+                show_btn.classList.add("new-edit-btn", "btn", "btn-info");
+                show_btn.id = "manage-show-btn-" + competition_type.id;
+                show_cell.appendChild(show_btn);
+
+                // add Event Listener to show button
+                document.getElementById("manage-show-btn-" + competition_type.id).addEventListener("click", () => {comp_view(competition_type.id);});
+
                 for (const key in competition_type) {
-                    if (key == "id") {
+                    if (key == "id" || key == "timestamp") {
                         continue;
                     }
                     if (competition_type.hasOwnProperty(key)) {
                         const cell = row.insertCell();
                         cell.innerHTML = competition_type[key];
-                    }
+                    } 
                 }
 
                 // create cell for both buttons
-                const edit_show_cell = row.insertCell();
+                const edit_cell = row.insertCell();
                 
                 // Create edit button
                 var edit_btn = document.createElement("button");
                 edit_btn.innerHTML = "Edit";
                 edit_btn.classList.add("new-edit-btn", "btn", "btn-primary");
                 edit_btn.id = "manage-edit-btn-" + competition_type.id;
-                edit_show_cell.appendChild(edit_btn);
+                edit_cell.appendChild(edit_btn);
                 
                 // add Event Listener to edit button
                 document.getElementById("manage-edit-btn-" + competition_type.id).addEventListener("click", () => {
                     showNew(data, index);
                 });
-                
-                // create show button
-                var show_btn = document.createElement("button");
-                show_btn.innerHTML = "Show";
-                show_btn.classList.add("new-edit-btn", "btn", "btn-info");
-                show_btn.id = "manage-show-btn-" + competition_type.id;
-                edit_show_cell.appendChild(show_btn);
 
-                // add Event Listener to show button
-                document.getElementById("manage-show-btn-" + competition_type.id).addEventListener("click", () => {comp_view(competition_type.id);});
-
-                // create form
+                // create delete form
                 var manage_delete_form = document.createElement("form");
                 manage_delete_form.id = "manage-delete-form-" + index;
                 manage_delete_form.classList.add("manage-delete-form");
@@ -97,12 +98,11 @@ function getManageData() {
                 manage_delete_form.appendChild(inpt_token);
 
                 // add to cell
-                edit_show_cell.appendChild(manage_delete_form);
+                edit_cell.appendChild(manage_delete_form);
             });
 
             // ------------------- Add event listener to delete-button -------------------
             document.querySelectorAll(".manage-delete-form").forEach((element, index) => {
-                console.log(element);
 
                 element.onsubmit = function (event) {
                     event.preventDefault();
