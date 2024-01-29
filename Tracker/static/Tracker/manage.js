@@ -68,37 +68,6 @@ function getManageData() {
                 document.getElementById("manage-edit-btn-" + competition_type.id).addEventListener("click", () => {
                     showNew(data, index);
                 });
-
-                // create delete form
-                var manage_delete_form = document.createElement("form");
-                manage_delete_form.id = "manage-delete-form-" + index;
-                manage_delete_form.classList.add("manage-delete-form");
-                manage_delete_form.method = "post"
-
-                // btn
-                var btn= document.createElement("button");
-                btn.innerHTML = "Delete";
-                btn.classList.add("manage-delete-btn", "btn", "btn-danger");
-                btn.id = "manage-delete-btn-" + competition_type.id;
-                btn.type = "submit";
-                manage_delete_form.appendChild(btn);
-
-                // Hidden ID
-                var h_val = document.createElement("input");
-                h_val.type = "hidden";
-                h_val.name = "item";
-                h_val.value = competition_type.id;
-                manage_delete_form.appendChild(h_val);
-
-                // CSRF token
-                var inpt_token = document.createElement("input");
-                inpt_token.type = "hidden";
-                inpt_token.name = "csrfmiddlewaretoken";
-                inpt_token.value = csrf_token;
-                manage_delete_form.appendChild(inpt_token);
-
-                // add to cell
-                edit_cell.appendChild(manage_delete_form);
             });
 
             // ------------------- Add event listener to delete-button -------------------

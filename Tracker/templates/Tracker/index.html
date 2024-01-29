@@ -91,10 +91,10 @@
 			<table class="table table-hover my-0">
 				<thead>
 					<tr>
+						<th></th>
 						<th>Name</th>
-						<th>Start Date</th>
 						<th>Description</th>
-						<th>Edit / Show</th>
+						<th>Edit</th>
 					</tr>
 				</thead>
 				<tbody id="manage-table-content"></tbody>
@@ -136,6 +136,20 @@
 						</div>
 						<div class="card-body">
 							<button type="submit" class="btn btn-primary">Submit</button>
+						</div>
+					</div>
+				</div>
+			</form>
+			<form method="post" id="new-delete-form">
+				<input type="hidden" name="item" id="new-delete-id" />
+				{% csrf_token %}
+				<div class="col-12 col-lg-8">
+					<div class="card">
+						<div class="card-header">
+							<h5 class="card-title mb-0">Delete</h5>
+						</div>
+						<div class="card-body">
+							<button type="submit" class="btn btn-danger">Delete</button>
 						</div>
 					</div>
 				</div>

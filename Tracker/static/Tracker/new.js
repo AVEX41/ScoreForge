@@ -1,10 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
-    var form = document.getElementById("new-form");
+    // on new/edit submit
+    var edit_form = document.getElementById("new-form");
 
-    form.onsubmit = function (event) {
+    edit_form.onsubmit = function (event) {
         event.preventDefault();
 
-        var formData = new FormData(form);
+        var formData = new FormData(edit_form);
         value = document.getElementById("new-submit-type").value
 
         // Variable to check if is edit or new
@@ -46,6 +47,39 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // delete form
+    var delete_form = document.getElementById("new-delete-form");
+
+    delete_form.onsubmit = function (event) {
+        event.preventDefault();
+
+        var formData = new FormData(delete_form);
+        
+        // Use fetch to send the form data
+        fetch("form/delete", {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRFToken": formData.get("csrfmiddlewaretoken")
+                // Add any other headers if needed
+            }
+        })
+        .then(response => {
+            // Check if the request was successful (status 2xx)
+            if (response.ok) {
+                // Handle the successful response here
+                showManage();
+            } else {
+                // Handle the error response here
+                console.error("Form submission failed with status: " + response.status);
+            }
+        })
+        .catch(error => {
+            // Handle network errors here
+            console.error("Network error occurred while submitting the form:", error);
+        });
+    }
+
 });
 function showNew(data, edit) {
     showPage("new");
@@ -61,10 +95,16 @@ function showNew(data, edit) {
         document.getElementById("new-submit-type").value = entity.id;
 
         // create delete button
-        
-    } else {
+        document.getElementById("new-delete-form").style.display = "flex";
 
+        // add hidden data to form
+        document.getElementById("new-delete-id").value = entity.id;
+    } else {
+        
         document.getElementById("new-form").reset();
         document.getElementById("new-submit-type").value = false;
+
+        // hide delete button
+        document.getElementById("new-delete-form").style.display = "none";
     }
 }
