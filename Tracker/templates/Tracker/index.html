@@ -21,7 +21,7 @@
 			<h5 class="h3 d-inline align-middle">Profile</h5>
 		</div>
 		<div class="row">
-			<div class="col-12 col-lg-6">
+			<div class="col-12 col-lg-6 profile-main">
 				<div class="card">
 					<div class="card-header">
 						<h5 class="card-title mb-0">Full name</h5>
@@ -29,7 +29,7 @@
 					<div class="card-body"><h3>{{ user.first_name }} {{ user.last_name }}</h3></div>
 				</div>
 			</div>
-			<div class="col-12 col-lg-6">
+			<div class="col-12 col-lg-6 edit-form">
 				<div class="card">
 					<div class="card-header">
 						<h5 class="card-title mb-0">Edit name</h5>
@@ -37,11 +37,13 @@
 					<div class="card-body">
 						<form id="profile-name-edit">
 							<input type="text" name="first_name" id="profile-first-name" class="form-control" required />
+							<br />
+							<button type="submit" class="btn btn-primary">Submit</button>
 						</form>
 					</div>
 				</div>
 			</div>
-			<div class="col-12 col-lg-6">
+			<div class="col-12 col-lg-6 profile-main">
 				<div class="card">
 					<div class="card-header">
 						<h5 class="card-title mb-0">Email</h5>
@@ -49,9 +51,23 @@
 					<div class="card-body"><h3>{{ user.email }}</h3></div>
 				</div>
 			</div>
+			<div class="col-12 col-lg-6 edit-form">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title mb-0">Edit email</h5>
+					</div>
+					<div class="card-body">
+						<form id="profile-email-edit">
+							<input type="text" name="email" id="profile-email" class="form-control" required />
+							<br />
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="row">
-			<div class="col-12 col-lg-6">
+			<div class="col-12 col-lg-6 profile-main">
 				<div class="card">
 					<div class="card-header">
 						<h5 class="card-title mb-0">Username</h5>
@@ -59,7 +75,21 @@
 					<div class="card-body"><h3>{{ user }}</h3></div>
 				</div>
 			</div>
-			<div class="col-12 col-lg-6">
+			<div class="col-12 col-lg-6 edit-form">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title mb-0">Edit user name</h5>
+					</div>
+					<div class="card-body">
+						<form id="profile-user-name-edit">
+							<input type="text" name="user_name" id="profile-first-name" class="form-control" required />
+							<br />
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-lg-6 profile-main">
 				<div class="card">
 					<div class="card-header">
 						<h5 class="card-title mb-0">Password</h5>
@@ -67,9 +97,45 @@
 					<div class="card-body"><button id="new-password-btn" class="btn btn-primary">Change password</button></div>
 				</div>
 			</div>
+			<div class="col-12 col-lg-6 edit-form">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title mb-0">Enter password</h5>
+					</div>
+					<div class="card-body">
+						<form id="profile-password-edit">
+							<input type="text" name="password" id="profile-password" class="form-control" required />
+							<br />
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-lg-6 profile-main">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title mb-0">Edit</h5>
+					</div>
+					<div class="card-body">
+						<button id="profile-show-edit" class="btn btn-primary">Edit</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-lg-6 edit-form">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title mb-0">Go back!</h5>
+					</div>
+					<div class="card-body">
+						<button id="profile-show-edit" class="btn btn-primary">Go back!</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	<script src="{% static 'Tracker/new.js' %}"></script>
+	<script src="{% static 'Tracker/profile.js' %}"></script>
 </div>
 <div id="manage" class="main-page">
 	<div class="container">
