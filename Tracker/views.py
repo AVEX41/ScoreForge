@@ -329,7 +329,7 @@ def usr_usrname(request):
         except KeyError:
             return JsonResponse({"error": "Invalid user."}, staus=400)
         try:
-            user.username = data["username"]
+            user.username = data["user_name"]
 
             user.save()
         except KeyError:
