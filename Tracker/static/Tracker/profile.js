@@ -37,6 +37,11 @@ document.addEventListener("DOMContentLoaded", () => {
             if (response.ok) {
                 // Handle the successful response here
                 console.log("name form submitted successfully");
+
+                document.getElementById("profile-first-name").innerHTML = formData.get("first_name");
+                document.getElementById("profile-last-name").innerHTML = formData.get("last_name");
+                
+                profile_show_main();
             } else {
                 // Handle the error response here
                 console.error("Form submission failed with status: " + response.status);
@@ -67,7 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
             // Check if the request was successful (status 2xx)
             if (response.ok) {
                 // Handle the successful response here
-                console.log("name form submitted successfully");
+                console.log("email form submitted successfully");
+
+                document.getElementById("profile-email").innerHTML = formData.get("email");
+                
+                profile_show_main();
             } else {
                 // Handle the error response here
                 console.error("Form submission failed with status: " + response.status);
@@ -98,7 +107,11 @@ document.addEventListener("DOMContentLoaded", () => {
             // Check if the request was successful (status 2xx)
             if (response.ok) {
                 // Handle the successful response here
-                console.log("name form submitted successfully");
+                console.log("username form submitted successfully");
+                
+                document.getElementById("profile-user-name").innerHTML = formData.get("user_name");
+                
+                profile_show_main();
             } else {
                 // Handle the error response here
                 console.error("Form submission failed with status: " + response.status);
@@ -129,7 +142,9 @@ document.addEventListener("DOMContentLoaded", () => {
             // Check if the request was successful (status 2xx)
             if (response.ok) {
                 // Handle the successful response here
-                console.log("name form submitted successfully");
+                console.log("pword form submitted successfully");
+
+                profile_show_main();
             } else {
                 // Handle the error response here
                 console.error("Form submission failed with status: " + response.status);
