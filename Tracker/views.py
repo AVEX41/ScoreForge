@@ -51,6 +51,40 @@ def indexDataFav(request):
         return JsonResponse({"error": "No Performance indicator favourited."})
 
 
+def indexFav(request):
+    if request.method == "POST":
+        try:
+            # Get data from request
+            data = request.POST
+        except KeyError:
+            return JsonResponse({"error": "Invalid data."}, status=400)
+        try:
+            # Get user
+            user = request.user
+        except KeyError:
+            return JsonResponse({"error": "Invalid user."}, staus=400)
+        try:
+            indicators = user.performance_indicators.filter(user_favourite=True)
+
+            for indicator in indicators:
+                indicator.user_favourite = False
+
+            new_fav = user.performance_indicators.get(id=data["perf_id"])
+            new_fav.user_favourite = True
+
+            for indicator in indicators:
+                indicator.save()
+            new_fav.save()
+            user.save()
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid data point data. Wrong parameters"}, status=400
+            )
+        return JsonResponse({"message": "User edited successfully."}, status=200)
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+
 def manage(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))

@@ -12,7 +12,7 @@ class User(AbstractUser):
 
     def serialize_performance_indicators(self):  # returns all the PerformanceIndicators
         competitions = self.performance_indicators.all().values(
-            "id", "name", "timestamp", "description"
+            "id", "name", "timestamp", "description", "user_favourite"
         )
 
         # Convert datetime objects to strings

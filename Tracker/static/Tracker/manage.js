@@ -3,6 +3,7 @@ function showManage() {
     getManageData();
 }
 
+
 function getManageData() {
     const fetchManageData = async () => {
         try {
@@ -45,7 +46,7 @@ function getManageData() {
                 document.getElementById("manage-show-btn-" + competition_type.id).addEventListener("click", () => {comp_view(competition_type.id);});
 
                 for (const key in competition_type) {
-                    if (key == "id" || key == "timestamp") {
+                    if (key == "id" || key == "timestamp" || key == "user_favourite") {
                         continue;
                     }
                     if (competition_type.hasOwnProperty(key)) {
@@ -68,39 +69,69 @@ function getManageData() {
                 document.getElementById("manage-edit-btn-" + competition_type.id).addEventListener("click", () => {
                     showNew(data, index);
                 });
-            });
 
-            // ------------------- Add event listener to delete-button -------------------
-            document.querySelectorAll(".manage-delete-form").forEach((element, index) => {
+                // Add favourite button or form
+                const fav_cell = row.insertCell();
 
-                element.onsubmit = function (event) {
-                    event.preventDefault();
+                if (competition_type.user_favourite == true) {
+                    var fav_btn = document.createElement("button");
+                    fav_btn.innerHTML = "Favourite";
+                    fav_btn.classList.add("new-fav-btn", "btn", "btn-warning");
+                    fav_btn.id = "manage-fav-btn-" + competition_type.id;
+                    fav_btn.disabled = true;
+                    fav_cell.appendChild(fav_btn);
+                } else {
+                    var fav_form = document.createElement("form");
+                    fav_form.id = "manage-fav-btn-" + competition_type.id;
+                    fav_form.classList.add("new-fav-form")
 
-                    var formData = new FormData(element);
+                    var fav_data = document.createElement("input");
+                    fav_data.type = "hidden";
+                    fav_data.value = competition_type.id;
+                    fav_data.name = "perf_id";
 
-                    fetch("/form/delete", {
-                        method: "POST",
-                        body: formData,
-                        headers: {
-                            "X-CSRFToken": formData.get("csrfmiddlewaretoken")
-                            // Add any other headers if needed
-                        }
-                    })
-                    .then(response => {
-                        // Check if the request was successful (status 2xx)
-                        if (response.ok) {
-                            // Handle the successful response here
-                            console.log("delete successfull");
-                        } else {
-                            // Handle the error response here
-                            console.error("Deletion returned with status: " + response.status);
-                        }
-                    })
-                    .catch(error => {
-                        // Handle network errors here
-                        console.error("Network error occurred while submitting the form:", error);
-                    });
+                    var fav_input = document.createElement("input");
+                    fav_input.type = "submit";
+                    fav_input.value = "Favourite";
+                    fav_input.classList.add("btn", "btn-warning");
+
+                    fav_form.appendChild(fav_input);
+                    fav_form.appendChild(fav_data);
+                    fav_cell.appendChild(fav_form);
                 }
+
+                // Add event listener to form submit button
+                document.querySelectorAll(".new-fav-form").forEach((element) => {
+                    element.onsubmit = (event) => {
+                        event.preventDefault();
+
+                        var formData = new FormData(element);
+                        
+                        // Use fetch to send the form data
+                        fetch("form/fav", {
+                            method: "POST",
+                            body: formData,
+                            headers: {
+                                "X-CSRFToken": csrf_token
+                                // Add any other headers if needed
+                            }
+                        })
+                        .then(response => {
+                            // Check if the request was successful (status 2xx)
+                            if (response.ok) {
+                                // Handle the successful response here
+                                getManageData();
+                            } else {
+                                // Handle the error response here
+                                console.error("Form submission failed with status: " + response.status);
+                            }
+                        })
+                        .catch(error => {
+                            // Handle network errors here
+                            console.error("Network error occurred while submitting the form:", error);
+                        });
+                    };
+                });
             });
 
         } catch (error) {

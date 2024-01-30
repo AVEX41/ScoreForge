@@ -24,6 +24,8 @@ urlpatterns = [
     path("form/edit/usr/usrname", views.usr_usrname, name="usr_usrname"),
     path("form/edit/usr/email", views.usr_email, name="usr_email"),
     path("form/edit/usr/pword", views.usr_pword, name="usr_pword"),
+    # Favourite
+    path("form/fav", views.indexFav, name="indexFav"),
     # --- Handle login ---
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),

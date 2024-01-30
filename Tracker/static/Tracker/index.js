@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
           labels: perf_indicator.map(scoreSet => scoreSet.x),
           datasets: [
             {
-              label: "Sample Data",
+              label: data.perf_indicator_id,
               data: perf_indicator,
               borderColor: "rgba(75, 192, 192, 1)",
               fill: false,
@@ -51,6 +51,9 @@ document.addEventListener("DOMContentLoaded", function () {
   
         // Create the chart
         const myChart = new Chart(ctx, config);
+
+        // Add title to graph
+        document.getElementById("index-chart-title").innerHTML = "Favourited Perfomance indicator: " + data.perf_indicator_id;
       } catch (error) {
         console.error('Error fetching data:', error);
       }
