@@ -13,6 +13,9 @@ jobs:
             - name: Build the Docker image
               run: docker-compose up --build -d
 
+            - name: Wait for DB
+              run: sleep 10 # Wait for the database to start up
+
             - name: Migrate
               run: docker-compose run web python3 manage.py migrate
 
