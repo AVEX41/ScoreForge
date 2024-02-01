@@ -16,6 +16,9 @@ jobs:
             - name: Wait for DB
               run: sleep 10 # Wait for the database to start up
 
+            - name: Make Migrations
+              run: docker-compose run web python3 manage.py makemigrations
+
             - name: Migrate
               run: docker-compose run web python3 manage.py migrate
 
