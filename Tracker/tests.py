@@ -60,6 +60,7 @@ class HTMLresponseTests(TestCase):  # Tests for HTML responses
 class DataRespnseTests(
     TestCase
 ):  # Tests for the fetch requests that the user can make for different pages
+    @classmethod
     def setUp(self):
         self.user1 = User.objects.create_user(
             username="user1", password="password1"
