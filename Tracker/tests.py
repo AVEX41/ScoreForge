@@ -4,8 +4,7 @@ from django.urls import reverse
 from .models import User, PerformanceIndicator, DataPoint
 
 
-# Create your tests here.
-class TrackerTestCase(TestCase):
+class HTMLresponseTests(TestCase):  # Tests for HTML responses
     def setUp(self):
         self.user1 = User.objects.create_user(
             username="user1", password="password1"
@@ -42,8 +41,6 @@ class TrackerTestCase(TestCase):
             score=8,
         )
 
-
-class HTMLresponseTests(TrackerTestCase):  # Tests for HTML responses
     def testUserHasLoggedIn(self):
         self.client.login(username="user1", password="password1")
         response = self.client.get(reverse("index"))
@@ -55,8 +52,44 @@ class HTMLresponseTests(TrackerTestCase):  # Tests for HTML responses
 
 
 class DataRespnseTests(
-    TrackerTestCase
+    TestCase
 ):  # Tests for the fetch requests that the user can make for different pages
+    def setUp(self):
+        self.user1 = User.objects.create_user(
+            username="user1", password="password1"
+        )  # user 1
+        self.user2 = User.objects.create_user(
+            username="user2", password="password2"
+        )  # user 2
+        self.perf_ind1 = PerformanceIndicator.objects.create(  # perfomance indicator 1
+            user=self.user1,
+            name="perf_ind1",
+            description="Description1",
+            user_favourite=True,
+        )
+        self.perf_ind2 = PerformanceIndicator.objects.create(  # perfomance indicator 2
+            user=self.user1,
+            name="perf_ind2",
+            description="Description2",
+            user_favourite=False,
+        )
+        self.datap1 = DataPoint.objects.create(  # datapoint 1:1
+            score_table=self.perf_ind1,
+            score=10,
+        )
+        self.datap2 = DataPoint.objects.create(  # datapoint 1:2
+            score_table=self.perf_ind1,
+            score=9,
+        )
+        self.datap3 = DataPoint.objects.create(  # datapoint 1:3
+            score_table=self.perf_ind1,
+            score=11,
+        )
+        self.datap4 = DataPoint.objects.create(  # datapoint 2:1
+            score_table=self.perf_ind2,
+            score=8,
+        )
+
     def testIndexFavourite(self):
         # --- handle fetch and response ---
         self.client.login(username="user1", password="password1")

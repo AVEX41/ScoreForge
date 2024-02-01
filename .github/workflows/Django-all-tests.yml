@@ -13,5 +13,8 @@ jobs:
             - name: Build the Docker image
               run: docker-compose up --build -d
 
+            - name: Migrate
+              run: docker-compose run web python3 manage.py migrate
+
             - name: Run tests
               run: docker-compose run web python3 manage.py test
