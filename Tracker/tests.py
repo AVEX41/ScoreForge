@@ -4,6 +4,12 @@ from django.urls import reverse
 from .models import User, PerformanceIndicator, DataPoint
 
 
+class GeneralTesting(TestCase):
+    def test_1(self):
+        response = self.client.get(reverse("login"))
+        self.assertEqual(response.status_code, 200)
+
+
 class HTMLresponseTests(TestCase):  # Tests for HTML responses
     def setUp(self):
         self.user1 = User.objects.create_user(
