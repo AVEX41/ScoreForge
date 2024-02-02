@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from django.http import (
     HttpResponseRedirect,
     JsonResponse,
+    HttpResponseBadRequest,
 )
 from django.shortcuts import render
 from django.urls import reverse
@@ -12,6 +13,7 @@ from django.urls import reverse
 from .models import User, PerformanceIndicator, DataPoint
 
 
+# -- HTML response --
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
@@ -25,9 +27,71 @@ def index(request):
     )
 
 
+def register(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+
+    if request.method == "POST":
+        first_name = request.POST["first_name"]
+        last_name = request.POST["last_name"]
+        username = request.POST["username"]
+        email = request.POST["email"]
+
+        # Ensure password matches confirmation
+        password = request.POST["password"]
+        confirmation = request.POST["confirmation"]
+        if password != confirmation:
+            return render(
+                request, "Tracker/register.html", {"message": "Passwords must match."}
+            )
+
+        # Attempt to create new user
+        try:
+            user = User.objects.create_user(username, email, password)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
+        except IntegrityError:
+            return render(
+                request, "Tracker/register.html", {"message": "Username already taken."}
+            )
+        login(request, user)
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(request, "Tracker/register.html")
+
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+
+    if request.method == "POST":
+        # Attempt to sign user in
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+
+        # Check if authentication successful
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(
+                request,
+                "Tracker/login.html",
+                {"message": "Invalid username and/or password."},
+            )
+    else:
+        return render(request, "Tracker/login.html")
+
+
+# -- JSON response --
 def indexDataFav(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
+
+    if request.method != "GET":
+        return HttpResponseBadRequest("Need to use get")
 
     user = request.user
     try:
@@ -49,6 +113,38 @@ def indexDataFav(request):
         return JsonResponse(response_data)
     else:
         return JsonResponse({"error": "No Performance indicator favourited."})
+
+
+def manage(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    user = request.user
+    performance_indicators = user.serialize_performance_indicators()
+
+    return JsonResponse({"competition_types": performance_indicators})
+
+
+def manageView(request, view):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+
+    user = request.user
+
+    try:
+        perf_indicator = user.performance_indicators.get(id=view)
+        data_points = perf_indicator.serialize_performance_indicator()
+    except PerformanceIndicator.DoesNotExist:
+        return JsonResponse({"error": "Invalid Performance indicator."})
+
+    responseData = {
+        "performance_indicator_id": perf_indicator.id,
+        "performance_indicator_name": perf_indicator.name,
+        "performance_indicator_description": perf_indicator.description,
+        "data_points": data_points,
+    }
+
+    return JsonResponse(responseData)
 
 
 def indexFav(request):
@@ -85,38 +181,7 @@ def indexFav(request):
         return JsonResponse({"error": "POST request required."}, status=400)
 
 
-def manage(request):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse("login"))
-
-    user = request.user
-    performance_indicators = user.serialize_performance_indicators()
-
-    return JsonResponse({"competition_types": performance_indicators})
-
-
-def manageView(request, view):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse("login"))
-
-    user = request.user
-
-    try:
-        perf_indicator = user.performance_indicators.get(id=view)
-        data_points = perf_indicator.serialize_performance_indicator()
-    except PerformanceIndicator.DoesNotExist:
-        return JsonResponse({"error": "Invalid Performance indicator."})
-
-    responseData = {
-        "performance_indicator_id": perf_indicator.id,
-        "performance_indicator_name": perf_indicator.name,
-        "performance_indicator_description": perf_indicator.description,
-        "data_points": data_points,
-    }
-
-    return JsonResponse(responseData)
-
-
+# -- Form submissions --
 def new(request):
     if request.method == "POST":
         try:
@@ -425,65 +490,7 @@ def usr_pword(request):
         return JsonResponse({"error": "POST request required."}, status=400)
 
 
-def login_view(request):
-    if request.user.is_authenticated:
-        return HttpResponseRedirect(reverse("index"))
-
-    if request.method == "POST":
-        # Attempt to sign user in
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-
-        # Check if authentication successful
-        if user is not None:
-            login(request, user)
-            return HttpResponseRedirect(reverse("index"))
-        else:
-            return render(
-                request,
-                "Tracker/login.html",
-                {"message": "Invalid username and/or password."},
-            )
-    else:
-        return render(request, "Tracker/login.html")
-
-
 @login_required
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("login"))
-
-
-def register(request):
-    if request.user.is_authenticated:
-        return HttpResponseRedirect(reverse("index"))
-
-    if request.method == "POST":
-        first_name = request.POST["first_name"]
-        last_name = request.POST["last_name"]
-        username = request.POST["username"]
-        email = request.POST["email"]
-
-        # Ensure password matches confirmation
-        password = request.POST["password"]
-        confirmation = request.POST["confirmation"]
-        if password != confirmation:
-            return render(
-                request, "Tracker/register.html", {"message": "Passwords must match."}
-            )
-
-        # Attempt to create new user
-        try:
-            user = User.objects.create_user(username, email, password)
-            user.first_name = first_name
-            user.last_name = last_name
-            user.save()
-        except IntegrityError:
-            return render(
-                request, "Tracker/register.html", {"message": "Username already taken."}
-            )
-        login(request, user)
-        return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "Tracker/register.html")
