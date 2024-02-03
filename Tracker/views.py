@@ -119,6 +119,9 @@ def manage(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
 
+    if request.method != "GET":
+        return HttpResponseBadRequest("Need to use get")
+
     user = request.user
     performance_indicators = user.serialize_performance_indicators()
 
@@ -129,13 +132,16 @@ def manageView(request, view):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
 
+    if request.method != "GET":
+        return HttpResponseBadRequest("Need to use get")
+
     user = request.user
 
     try:
         perf_indicator = user.performance_indicators.get(id=view)
         data_points = perf_indicator.serialize_performance_indicator()
     except PerformanceIndicator.DoesNotExist:
-        return JsonResponse({"error": "Invalid Performance indicator."})
+        return JsonResponse({"error": "Invalid Performance indicator."}, status=400)
 
     responseData = {
         "performance_indicator_id": perf_indicator.id,

@@ -24,6 +24,12 @@ class TrackerTestCase(TestCase):
             description="Description2",
             user_favourite=False,
         )
+        self.perf_ind3 = PerformanceIndicator.objects.create(  # perfomance indicator 2
+            user=self.user2,
+            name="perf_ind3",
+            description="Description3",
+            user_favourite=False,
+        )
         self.datap1 = DataPoint.objects.create(  # datapoint 1:1
             score_table=self.perf_ind1,
             score=10,
@@ -53,9 +59,10 @@ class HTMLresponseTests(TrackerTestCase):  # Tests for HTML responses
         self.assertEqual(response.status_code, 302)
 
 
-class DataRespnseTests(
+class DataResponseTests(
     TrackerTestCase
 ):  # Tests for the fetch requests that the user can make for different pages
+    # ---- Happy path tests ----
     def testIndexFavourite(self):
         # --- handle fetch and response ---
         self.client.login(username="user1", password="password1")
@@ -147,3 +154,65 @@ class DataRespnseTests(
         stored_datapoints = DataPoint.objects.filter(score_table=self.perf_ind2.id)
         for index, datapoint in enumerate(stored_datapoints):
             self.assertEqual(dataPoints[index]["fields"]["score"], datapoint.score)
+
+    # ---- Negative path testing ----
+    # -- Index favourite
+    def testIndexFavouritePOST(self):
+        # --- handle fetch and response ---
+        self.client.login(username="user1", password="password1")
+        response = self.client.post(reverse("indexData"))
+        self.assertEqual(response.status_code, 400)
+
+    def testIndexFavouriteNotAuth(self):
+        # --- handle fetch and response ---
+        response = self.client.get(reverse("indexData"))
+        self.assertEqual(response.status_code, 302)
+
+    def testIndexFavouriteNotFav(self):
+        # --- handle fetch and response ---
+        self.client.login(username="user2", password="password2")
+        response = self.client.get(reverse("indexData"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json()["error"], "No Performance indicator favourited."
+        )
+
+    # -- Manage --
+    def testManagePOST(self):
+        # --- handle fetch and response ---
+        self.client.login(username="user1", password="password1")
+        response = self.client.post(reverse("manage"))
+        self.assertEqual(response.status_code, 400)
+
+    def testManageNotAuth(self):
+        # --- handle fetch and response ---
+        response = self.client.get(reverse("manage"))
+        self.assertEqual(response.status_code, 302)
+
+    # -- Manage specific
+    def testManageViewPOST(self):
+        # --- handle fetch and response ---
+        self.client.login(username="user1", password="password1")
+        response = self.client.post(
+            reverse("manageView", kwargs={"view": self.perf_ind2.id})
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def testManageViewNotAuth(self):
+        # --- handle fetch and response ---
+        response = self.client.get(
+            reverse("manageView", kwargs={"view": self.perf_ind2.id})
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def testManageViewWrongUser(self):
+        # --- handle fetch and response ---
+        self.client.login(username="user1", password="password1")
+        response = self.client.get(
+            reverse("manageView", kwargs={"view": self.perf_ind3.id})
+        )
+        self.assertEqual(response.status_code, 400)
+
+        # check error:
+        data = response.json()
+        self.assertEqual(data["error"], "Invalid Performance indicator.")
