@@ -236,6 +236,9 @@ def comp_new(request):
 
 
 def edit(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Must be logged in."}, status=400)
+
     if request.method == "POST":
         try:
             # Get data from request
@@ -252,15 +255,22 @@ def edit(request):
         try:
             # Get object
             performance_indicator = PerformanceIndicator.objects.get(
-                id=data["submit-type"]
+                id=data["submit-type"], user=user
             )
-
+        except:
+            return JsonResponse(
+                {
+                    "error": "Could not find a Perfomance indicator with the specified ID and user."
+                },
+                status=400,
+            )
+        try:
             # Edit object
             performance_indicator.name = data["name"]
             performance_indicator.description = data["description"]
 
             performance_indicator.save()
-        except KeyError:
+        except:
             return JsonResponse(
                 {"error": "Invalid performance indicator data."}, status=400
             )
@@ -273,6 +283,9 @@ def edit(request):
 
 
 def comp_edit(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Must be logged in."}, status=400)
+
     if request.method == "POST":
         try:
             # Get data from request
@@ -287,8 +300,15 @@ def comp_edit(request):
             return JsonResponse({"error": "Invalid user."}, staus=400)
 
         try:
-            # Edit data point
             data_point = DataPoint.objects.get(id=data["submit_type"])
+            perf_indicator = data_point.score_table
+            data_point_user = perf_indicator.user
+
+            if data_point_user != user:
+                raise DataPoint.DoesNotExist()
+
+            # Edit data point
+            # data_point = DataPoint.objects.get(id=data["submit_type"])
 
             data_point.score = data["score"]
 
@@ -296,6 +316,15 @@ def comp_edit(request):
         except KeyError:
             return JsonResponse(
                 {"error": "Invalid data point data. Wrong parameters"}, status=400
+            )
+        except DataPoint.DoesNotExist:
+            return JsonResponse(
+                {"error": "Could not find a datapoint with the specified id and user"},
+                status=400,
+            )
+        except:
+            return JsonResponse(
+                {"error": "Invalid data, the declaration did not work."}, status=400
             )
 
         return JsonResponse({"message": "Datapoint edited successfully."}, status=200)
