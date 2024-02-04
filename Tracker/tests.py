@@ -304,5 +304,67 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         self.assertEqual(new.score_table, old.score_table)  # owner of object
         self.assertNotEqual(new.score, old.score)  # score of objects
 
+    def testDeletePerfIndForm(self):
+        test_object = PerformanceIndicator.objects.create(
+            user=self.user1,
+            name="perf_ind6",
+            description="Description6",
+            user_favourite=False,
+        )
+        object_id = test_object.id
+
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "item": object_id,
+        }
+        response = self.client.post(reverse("delete"), data=form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json()["message"], "Performance indicator deleted successfully."
+        )
+
+        # Check if object
+        try:
+            PerformanceIndicator.objects.get(id=object_id)  # Throws error
+            self.fail("Object still exist")
+        except:
+            self.assertTrue(True)
+
+    def testDeleteDataPointForm(self):
+        test_object = DataPoint.objects.create(score_table=self.perf_ind1, score=4)
+        object_id = test_object.id
+
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "item": object_id,
+        }
+        response = self.client.post(reverse("comp_delete"), data=form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["message"], "DataPoint deleted successfully.")
+
+        # Check if object
+        try:
+            DataPoint.objects.get(id=object_id)  # Throws error
+            self.fail("Object still exist")
+        except:
+            self.assertTrue(True)
+
+    def testFormIndexFavourite(self):
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {"perf_id": self.perf_ind2.id}
+        response = self.client.post(reverse("indexFav"), data=form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["message"], "Favourite edited successfully.")
+
+        # Check if it is the only user favourite
+        favourites = PerformanceIndicator.objects.filter(user_favourite=True)
+        self.assertEqual(len(favourites), 1)
+
     # ---- Negative path testing
     ...
+
+
+class UserEditTests(TrackerTestCase): ...

@@ -323,7 +323,7 @@ def delete(request):
             )
 
         return JsonResponse(
-            {"message": "performance indicator deleted successfully."}, status=200
+            {"message": "Performance indicator deleted successfully."}, status=200
         )
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
@@ -354,7 +354,7 @@ def comp_delete(request):
                 {"error": "Invalid data point data. Wrong parameters"}, status=400
             )
 
-        return JsonResponse({"message": "DataPoint delete successfully."}, status=200)
+        return JsonResponse({"message": "DataPoint deleted successfully."}, status=200)
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
 
@@ -388,7 +388,7 @@ def indexFav(request):
             return JsonResponse(
                 {"error": "Invalid data point data. Wrong parameters"}, status=400
             )
-        return JsonResponse({"message": "Favourite edited successfully"}, status=200)
+        return JsonResponse({"message": "Favourite edited successfully."}, status=200)
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
 
