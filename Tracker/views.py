@@ -153,40 +153,6 @@ def manageView(request, view):
     return JsonResponse(responseData)
 
 
-def indexFav(request):
-    if request.method == "POST":
-        try:
-            # Get data from request
-            data = request.POST
-        except KeyError:
-            return JsonResponse({"error": "Invalid data."}, status=400)
-        try:
-            # Get user
-            user = request.user
-        except KeyError:
-            return JsonResponse({"error": "Invalid user."}, staus=400)
-        try:
-            indicators = user.performance_indicators.filter(user_favourite=True)
-
-            for indicator in indicators:
-                indicator.user_favourite = False
-
-            new_fav = user.performance_indicators.get(id=data["perf_id"])
-            new_fav.user_favourite = True
-
-            for indicator in indicators:
-                indicator.save()
-            new_fav.save()
-            user.save()
-        except KeyError:
-            return JsonResponse(
-                {"error": "Invalid data point data. Wrong parameters"}, status=400
-            )
-        return JsonResponse({"message": "User edited successfully."}, status=200)
-    else:
-        return JsonResponse({"error": "POST request required."}, status=400)
-
-
 # -- Form submissions --
 def new(request):
     if request.method == "POST":
@@ -217,7 +183,7 @@ def new(request):
             )
 
         return JsonResponse(
-            {"message": "performance indicator created successfully."}, status=200
+            {"message": "Performance indicator created successfully."}, status=200
         )
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
@@ -258,9 +224,7 @@ def comp_new(request):
                 {"error": "Invalid data point data. Wrong parameters"}, status=400
             )
 
-        return JsonResponse(
-            {"message": "Competition created successfully."}, status=200
-        )
+        return JsonResponse({"message": "Datapoint created successfully."}, status=200)
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
 
@@ -296,7 +260,7 @@ def edit(request):
             )
 
         return JsonResponse(
-            {"message": "performance indicator edited successfully."}, status=200
+            {"message": "Performance indicator edited successfully."}, status=200
         )
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
@@ -328,7 +292,7 @@ def comp_edit(request):
                 {"error": "Invalid data point data. Wrong parameters"}, status=400
             )
 
-        return JsonResponse({"message": "datapoint edited successfully."}, status=200)
+        return JsonResponse({"message": "Datapoint edited successfully."}, status=200)
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
 
@@ -391,6 +355,40 @@ def comp_delete(request):
             )
 
         return JsonResponse({"message": "DataPoint delete successfully."}, status=200)
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+
+def indexFav(request):
+    if request.method == "POST":
+        try:
+            # Get data from request
+            data = request.POST
+        except KeyError:
+            return JsonResponse({"error": "Invalid data."}, status=400)
+        try:
+            # Get user
+            user = request.user
+        except KeyError:
+            return JsonResponse({"error": "Invalid user."}, staus=400)
+        try:
+            indicators = user.performance_indicators.filter(user_favourite=True)
+
+            for indicator in indicators:
+                indicator.user_favourite = False
+
+            new_fav = user.performance_indicators.get(id=data["perf_id"])
+            new_fav.user_favourite = True
+
+            for indicator in indicators:
+                indicator.save()
+            new_fav.save()
+            user.save()
+        except KeyError:
+            return JsonResponse(
+                {"error": "Invalid data point data. Wrong parameters"}, status=400
+            )
+        return JsonResponse({"message": "Favourite edited successfully"}, status=200)
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
 

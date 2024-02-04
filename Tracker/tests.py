@@ -216,3 +216,93 @@ class DataResponseTests(
         # check error:
         data = response.json()
         self.assertEqual(data["error"], "Invalid Performance indicator.")
+
+
+class FormTests(TrackerTestCase):  # Tests for the form routes
+    # ---- Happy path testing ----
+    def testNewPerfIndForm(self):
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "name": "perf_ind4",
+            "description": "description4",
+        }
+        response = self.client.post(reverse("new"), data=form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json()["message"], "Performance indicator created successfully."
+        )
+        # Check if object got created
+        try:
+            PerformanceIndicator.objects.get(name="perf_ind4")
+        except:
+            self.fail("Object was not created")
+
+    def testNewDataPointForm(self):
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "competition_type": self.perf_ind1.id,
+            "score": 20,
+        }
+        response = self.client.post(reverse("comp_new"), data=form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["message"], "Datapoint created successfully.")
+
+        # Check if object got created
+        try:
+            DataPoint.objects.get(score_table=self.perf_ind1, score=20)
+        except:
+            self.fail("Object was not created")
+
+    def testEditPerfIndForm(self):
+        current_id = self.perf_ind3.id
+        # Old object
+        old = PerformanceIndicator.objects.get(id=current_id)
+
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "submit-type": current_id,
+            "name": "perf_ind5",
+            "description": "description5",
+        }
+
+        self.assertEqual(1, 1)
+        response = self.client.post(reverse("edit"), data=form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json()["message"], "Performance indicator edited successfully."
+        )
+
+        new = PerformanceIndicator.objects.get(id=current_id)
+
+        # Assertions: object
+        self.assertEqual(new.id, old.id)  # id of object
+        self.assertNotEqual(new.name, old.name)  # name of objects
+        self.assertNotEqual(new.description, old.description)  # description of objects
+
+    def testEditDataPointForm(self):
+        current_id = self.datap3.id
+        # Old object
+        old = DataPoint.objects.get(id=current_id)
+
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "submit_type": current_id,
+            "score": 20,
+        }
+        response = self.client.post(reverse("comp_edit"), data=form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["message"], "Datapoint edited successfully.")
+
+        new = DataPoint.objects.get(id=current_id)
+
+        # Assertions: object
+        self.assertEqual(new.id, old.id)  # id of object
+        self.assertEqual(new.score_table, old.score_table)  # owner of object
+        self.assertNotEqual(new.score, old.score)  # score of objects
+
+    # ---- Negative path testing
+    ...
