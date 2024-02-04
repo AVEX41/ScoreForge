@@ -363,8 +363,136 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         favourites = PerformanceIndicator.objects.filter(user_favourite=True)
         self.assertEqual(len(favourites), 1)
 
-    # ---- Negative path testing
-    ...
+    # ---- Negative path testing ----
+    # New Performance indicator form
+    def testNewPerfIndFormNotAuth(self):
+        # Form data
+        form_data = {
+            "name": "perf_ind4",
+            "description": "description4",
+        }
+        response = self.client.post(reverse("new"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error"], "Must be logged in.")
+
+        # Check if object were created
+        try:
+            PerformanceIndicator.objects.get(name="perf_ind4")
+            self.fail("Object were created")
+        except:
+            self.assertTrue(True)
+
+    def testNewPerfIndFormNotPost(self):
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "name": "perf_ind4",
+            "description": "description4",
+        }
+        response = self.client.get(reverse("new"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error"], "POST request required.")
+
+        # Check if object were created
+        try:
+            PerformanceIndicator.objects.get(name="perf_ind4")
+            self.fail("Object were created")
+        except:
+            self.assertTrue(True)
+
+    def testNewPerfIndFormWrongParams(self):
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "wrong_name": "perf_ind4",
+            "wrong_description": "description4",
+        }
+        response = self.client.post(reverse("new"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["error"], "Invalid performance indicator data."
+        )
+
+        # Check if object were created
+        try:
+            PerformanceIndicator.objects.get(name="perf_ind4")
+            self.fail("Object were created")
+        except:
+            self.assertTrue(True)
+
+    # New DataPoint form
+    def testNewDataPointFormNotAuth(self):
+        # Form data
+        form_data = {
+            "competition_type": self.perf_ind1.id,
+            "score": 20,
+        }
+        response = self.client.post(reverse("comp_new"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error"], "Must be logged in.")
+
+        # Check if object were created
+        try:
+            DataPoint.objects.get(score_table=self.perf_ind1, score=20)
+            self.fail("Object were created")
+        except:
+            self.assertTrue(True)
+
+    def testNewDataPointFormNotPost(self):
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "competition_type": self.perf_ind1.id,
+            "score": 20,
+        }
+        response = self.client.get(reverse("comp_new"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error"], "POST request required.")
+
+        # Check if object were created
+        try:
+            DataPoint.objects.get(score_table=self.perf_ind1, score=20)
+            self.fail("Object were created")
+        except:
+            self.assertTrue(True)
+
+    def testNewDataPointFormWrongPerfInd(self):
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "wrong_competition_type": self.perf_ind1.id,
+            "score": 20,
+        }
+        response = self.client.post(reverse("comp_new"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error"], "Invalid perfomance indicator.")
+
+        # Check if object were created
+        try:
+            DataPoint.objects.get(score_table=self.perf_ind1, score=20)
+            self.fail("Object were created")
+        except:
+            self.assertTrue(True)
+
+    def testNewDataPointFormWrongScore(self):
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "competition_type": self.perf_ind1.id,
+            "wrong_score": 20,
+        }
+        response = self.client.post(reverse("comp_new"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["error"], "Invalid data point data. Wrong parameters."
+        )
+
+        # Check if object were created
+        try:
+            DataPoint.objects.get(score_table=self.perf_ind1, score=20)
+            self.fail("Object were created")
+        except:
+            self.assertTrue(True)
 
 
 class UserEditTests(TrackerTestCase): ...

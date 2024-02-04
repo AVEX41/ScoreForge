@@ -155,6 +155,9 @@ def manageView(request, view):
 
 # -- Form submissions --
 def new(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Must be logged in."}, status=400)
+
     if request.method == "POST":
         try:
             # Get data from request
@@ -190,6 +193,9 @@ def new(request):
 
 
 def comp_new(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Must be logged in."}, status=400)
+
     if request.method == "POST":
         try:
             # Get data from request
@@ -221,7 +227,7 @@ def comp_new(request):
             competition.save()
         except KeyError:
             return JsonResponse(
-                {"error": "Invalid data point data. Wrong parameters"}, status=400
+                {"error": "Invalid data point data. Wrong parameters."}, status=400
             )
 
         return JsonResponse({"message": "Datapoint created successfully."}, status=200)
@@ -360,6 +366,9 @@ def comp_delete(request):
 
 
 def indexFav(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Must be logged in"}, status=400)
+
     if request.method == "POST":
         try:
             # Get data from request
