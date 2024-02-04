@@ -97,7 +97,7 @@ def indexDataFav(request):
     try:
         perf_indicator = user.performance_indicators.get(user_favourite=True)
     except PerformanceIndicator.DoesNotExist:
-        return JsonResponse({"error": "No Performance indicator favourited."})
+        return JsonResponse({"message": "No Performance indicator favourited."})
 
     if perf_indicator:
         # Serialize the score sets associated with the score table
@@ -112,7 +112,7 @@ def indexDataFav(request):
 
         return JsonResponse(response_data)
     else:
-        return JsonResponse({"error": "No Performance indicator favourited."})
+        return JsonResponse({"message": "No Performance indicator favourited."})
 
 
 def manage(request):
@@ -141,7 +141,7 @@ def manageView(request, view):
         perf_indicator = user.performance_indicators.get(id=view)
         data_points = perf_indicator.serialize_performance_indicator()
     except PerformanceIndicator.DoesNotExist:
-        return JsonResponse({"error": "Invalid Performance indicator."}, status=400)
+        return JsonResponse({"message": "Invalid Performance indicator."}, status=400)
 
     responseData = {
         "performance_indicator_id": perf_indicator.id,
@@ -156,20 +156,20 @@ def manageView(request, view):
 # -- Form submissions --
 def new(request):
     if not request.user.is_authenticated:
-        return JsonResponse({"error": "Must be logged in."}, status=400)
+        return JsonResponse({"message": "Must be logged in."}, status=400)
 
     if request.method == "POST":
         try:
             # Get data from request
             data = request.POST
         except KeyError:
-            return JsonResponse({"error": "Invalid data."}, status=400)
+            return JsonResponse({"message": "Invalid data."}, status=400)
 
         try:
             # Get user
             user = request.user
         except KeyError:
-            return JsonResponse({"error": "Invalid user."}, status=400)
+            return JsonResponse({"message": "Invalid user."}, status=400)
 
         try:
             # Create new competition type
@@ -182,32 +182,32 @@ def new(request):
             performance_indicator.save()
         except KeyError:
             return JsonResponse(
-                {"error": "Invalid performance indicator data."}, status=400
+                {"message": "Invalid performance indicator data."}, status=400
             )
 
         return JsonResponse(
             {"message": "Performance indicator created successfully."}, status=200
         )
     else:
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({"message": "POST request required."}, status=400)
 
 
 def comp_new(request):
     if not request.user.is_authenticated:
-        return JsonResponse({"error": "Must be logged in."}, status=400)
+        return JsonResponse({"message": "Must be logged in."}, status=400)
 
     if request.method == "POST":
         try:
             # Get data from request
             data = request.POST
         except KeyError:
-            return JsonResponse({"error": "Invalid data."}, status=400)
+            return JsonResponse({"message": "Invalid data."}, status=400)
 
         try:
             # Get user
             user = request.user
         except KeyError:
-            return JsonResponse({"error": "Invalid user."}, staus=400)
+            return JsonResponse({"message": "Invalid user."}, staus=400)
 
         try:
             # Get score table
@@ -215,7 +215,9 @@ def comp_new(request):
                 id=data["competition_type"]
             )
         except KeyError:
-            return JsonResponse({"error": "Invalid perfomance indicator."}, status=400)
+            return JsonResponse(
+                {"message": "Invalid perfomance indicator."}, status=400
+            )
 
         try:
             # Create new competition type
@@ -227,30 +229,30 @@ def comp_new(request):
             competition.save()
         except KeyError:
             return JsonResponse(
-                {"error": "Invalid data point data. Wrong parameters."}, status=400
+                {"message": "Invalid data point data. Wrong parameters."}, status=400
             )
 
         return JsonResponse({"message": "Datapoint created successfully."}, status=200)
     else:
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({"message": "POST request required."}, status=400)
 
 
 def edit(request):
     if not request.user.is_authenticated:
-        return JsonResponse({"error": "Must be logged in."}, status=400)
+        return JsonResponse({"message": "Must be logged in."}, status=400)
 
     if request.method == "POST":
         try:
             # Get data from request
             data = request.POST
         except KeyError:
-            return JsonResponse({"error": "Invalid data."}, status=400)
+            return JsonResponse({"message": "Invalid data."}, status=400)
 
         try:
             # Get user
             user = request.user
         except KeyError:
-            return JsonResponse({"error": "Invalid user."}, status=400)
+            return JsonResponse({"message": "Invalid user."}, status=400)
 
         try:
             # Get object
@@ -260,7 +262,7 @@ def edit(request):
         except:
             return JsonResponse(
                 {
-                    "error": "Could not find a Perfomance indicator with the specified ID and user."
+                    "message": "Could not find a Perfomance indicator with the specified ID and user."
                 },
                 status=400,
             )
@@ -272,32 +274,32 @@ def edit(request):
             performance_indicator.save()
         except:
             return JsonResponse(
-                {"error": "Invalid performance indicator data."}, status=400
+                {"message": "Invalid performance indicator data."}, status=400
             )
 
         return JsonResponse(
             {"message": "Performance indicator edited successfully."}, status=200
         )
     else:
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({"message": "POST request required."}, status=400)
 
 
 def comp_edit(request):
     if not request.user.is_authenticated:
-        return JsonResponse({"error": "Must be logged in."}, status=400)
+        return JsonResponse({"message": "Must be logged in."}, status=400)
 
     if request.method == "POST":
         try:
             # Get data from request
             data = request.POST
         except KeyError:
-            return JsonResponse({"error": "Invalid data."}, status=400)
+            return JsonResponse({"message": "Invalid data."}, status=400)
 
         try:
             # Get user
             user = request.user
         except KeyError:
-            return JsonResponse({"error": "Invalid user."}, staus=400)
+            return JsonResponse({"message": "Invalid user."}, staus=400)
 
         try:
             data_point = DataPoint.objects.get(id=data["submit_type"])
@@ -315,21 +317,23 @@ def comp_edit(request):
             data_point.save()
         except KeyError:
             return JsonResponse(
-                {"error": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data point data. Wrong parameters"}, status=400
             )
         except DataPoint.DoesNotExist:
             return JsonResponse(
-                {"error": "Could not find a datapoint with the specified id and user"},
+                {
+                    "message": "Could not find a datapoint with the specified id and user"
+                },
                 status=400,
             )
         except:
             return JsonResponse(
-                {"error": "Invalid data, the declaration did not work."}, status=400
+                {"message": "Invalid data, the declaration did not work."}, status=400
             )
 
         return JsonResponse({"message": "Datapoint edited successfully."}, status=200)
     else:
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({"message": "POST request required."}, status=400)
 
 
 def delete(request):
@@ -338,13 +342,13 @@ def delete(request):
             # Get data from request
             data = request.POST
         except KeyError:
-            return JsonResponse({"error": "Invalid data."}, status=400)
+            return JsonResponse({"message": "Invalid data."}, status=400)
 
         try:
             # Get user
             user = request.user
         except KeyError:
-            return JsonResponse({"error": "Invalid user."}, status=400)
+            return JsonResponse({"message": "Invalid user."}, status=400)
 
         try:
             # Get object
@@ -354,14 +358,14 @@ def delete(request):
             performance_indicator.delete()
         except KeyError:
             return JsonResponse(
-                {"error": "Invalid performance indicator data."}, status=400
+                {"message": "Invalid performance indicator data."}, status=400
             )
 
         return JsonResponse(
             {"message": "Performance indicator deleted successfully."}, status=200
         )
     else:
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({"message": "POST request required."}, status=400)
 
 
 def comp_delete(request):
@@ -370,13 +374,13 @@ def comp_delete(request):
             # Get data from request
             data = request.POST
         except KeyError:
-            return JsonResponse({"error": "Invalid data."}, status=400)
+            return JsonResponse({"message": "Invalid data."}, status=400)
 
         try:
             # Get user
             user = request.user
         except KeyError:
-            return JsonResponse({"error": "Invalid user."}, staus=400)
+            return JsonResponse({"message": "Invalid user."}, staus=400)
 
         try:
             # Edit data point
@@ -386,29 +390,29 @@ def comp_delete(request):
             data_point.delete()
         except KeyError:
             return JsonResponse(
-                {"error": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data point data. Wrong parameters"}, status=400
             )
 
         return JsonResponse({"message": "DataPoint deleted successfully."}, status=200)
     else:
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({"message": "POST request required."}, status=400)
 
 
 def indexFav(request):
     if not request.user.is_authenticated:
-        return JsonResponse({"error": "Must be logged in"}, status=400)
+        return JsonResponse({"message": "Must be logged in"}, status=400)
 
     if request.method == "POST":
         try:
             # Get data from request
             data = request.POST
         except KeyError:
-            return JsonResponse({"error": "Invalid data."}, status=400)
+            return JsonResponse({"message": "Invalid data."}, status=400)
         try:
             # Get user
             user = request.user
         except KeyError:
-            return JsonResponse({"error": "Invalid user."}, staus=400)
+            return JsonResponse({"message": "Invalid user."}, staus=400)
         try:
             indicators = user.performance_indicators.filter(user_favourite=True)
 
@@ -424,11 +428,11 @@ def indexFav(request):
             user.save()
         except KeyError:
             return JsonResponse(
-                {"error": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data point data. Wrong parameters"}, status=400
             )
         return JsonResponse({"message": "Favourite edited successfully."}, status=200)
     else:
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({"message": "POST request required."}, status=400)
 
 
 def usr_name(request):
@@ -437,12 +441,12 @@ def usr_name(request):
             # Get data from request
             data = request.POST
         except KeyError:
-            return JsonResponse({"error": "Invalid data."}, status=400)
+            return JsonResponse({"message": "Invalid data."}, status=400)
         try:
             # Get user
             user = request.user
         except KeyError:
-            return JsonResponse({"error": "Invalid user."}, staus=400)
+            return JsonResponse({"message": "Invalid user."}, staus=400)
         try:
             user.first_name = data["first_name"]
             user.last_name = data["last_name"]
@@ -450,11 +454,11 @@ def usr_name(request):
             user.save()
         except KeyError:
             return JsonResponse(
-                {"error": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data point data. Wrong parameters"}, status=400
             )
         return JsonResponse({"message": "User edited successfully."}, status=200)
     else:
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({"message": "POST request required."}, status=400)
 
 
 def usr_usrname(request):
@@ -463,23 +467,23 @@ def usr_usrname(request):
             # Get data from request
             data = request.POST
         except KeyError:
-            return JsonResponse({"error": "Invalid data."}, status=400)
+            return JsonResponse({"message": "Invalid data."}, status=400)
         try:
             # Get user
             user = request.user
         except KeyError:
-            return JsonResponse({"error": "Invalid user."}, staus=400)
+            return JsonResponse({"message": "Invalid user."}, staus=400)
         try:
             user.username = data["user_name"]
 
             user.save()
         except KeyError:
             return JsonResponse(
-                {"error": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data point data. Wrong parameters"}, status=400
             )
         return JsonResponse({"message": "User edited successfully."}, status=200)
     else:
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({"message": "POST request required."}, status=400)
 
 
 def usr_email(request):
@@ -488,23 +492,23 @@ def usr_email(request):
             # Get data from request
             data = request.POST
         except KeyError:
-            return JsonResponse({"error": "Invalid data."}, status=400)
+            return JsonResponse({"message": "Invalid data."}, status=400)
         try:
             # Get user
             user = request.user
         except KeyError:
-            return JsonResponse({"error": "Invalid user."}, staus=400)
+            return JsonResponse({"message": "Invalid user."}, staus=400)
         try:
             user.email = data["email"]
 
             user.save()
         except KeyError:
             return JsonResponse(
-                {"error": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data point data. Wrong parameters"}, status=400
             )
         return JsonResponse({"message": "User edited successfully."}, status=200)
     else:
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({"message": "POST request required."}, status=400)
 
 
 def usr_pword(request):
@@ -513,23 +517,23 @@ def usr_pword(request):
             # Get data from request
             data = request.POST
         except KeyError:
-            return JsonResponse({"error": "Invalid data."}, status=400)
+            return JsonResponse({"message": "Invalid data."}, status=400)
         try:
             # Get user
             user = request.user
         except KeyError:
-            return JsonResponse({"error": "Invalid user."}, staus=400)
+            return JsonResponse({"message": "Invalid user."}, staus=400)
         try:
             user.set_password(data["password"])
 
             user.save()
         except KeyError:
             return JsonResponse(
-                {"error": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data point data. Wrong parameters"}, status=400
             )
         return JsonResponse({"message": "User edited successfully."}, status=200)
     else:
-        return JsonResponse({"error": "POST request required."}, status=400)
+        return JsonResponse({"message": "POST request required."}, status=400)
 
 
 @login_required

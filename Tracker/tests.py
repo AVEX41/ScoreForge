@@ -174,7 +174,7 @@ class DataResponseTests(
         response = self.client.get(reverse("indexData"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            response.json()["error"], "No Performance indicator favourited."
+            response.json()["message"], "No Performance indicator favourited."
         )
 
     # -- Manage --
@@ -215,7 +215,7 @@ class DataResponseTests(
 
         # check error:
         data = response.json()
-        self.assertEqual(data["error"], "Invalid Performance indicator.")
+        self.assertEqual(data["message"], "Invalid Performance indicator.")
 
 
 class FormTests(TrackerTestCase):  # Tests for the form routes
@@ -373,7 +373,7 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         }
         response = self.client.post(reverse("new"), data=form_data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["error"], "Must be logged in.")
+        self.assertEqual(response.json()["message"], "Must be logged in.")
 
         # Check if object were created
         try:
@@ -391,7 +391,7 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         }
         response = self.client.get(reverse("new"), data=form_data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["error"], "POST request required.")
+        self.assertEqual(response.json()["message"], "POST request required.")
 
         # Check if object were created
         try:
@@ -410,7 +410,7 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         response = self.client.post(reverse("new"), data=form_data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
-            response.json()["error"], "Invalid performance indicator data."
+            response.json()["message"], "Invalid performance indicator data."
         )
 
         # Check if object were created
@@ -429,7 +429,7 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         }
         response = self.client.post(reverse("comp_new"), data=form_data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["error"], "Must be logged in.")
+        self.assertEqual(response.json()["message"], "Must be logged in.")
 
         # Check if object were created
         try:
@@ -447,7 +447,7 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         }
         response = self.client.get(reverse("comp_new"), data=form_data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["error"], "POST request required.")
+        self.assertEqual(response.json()["message"], "POST request required.")
 
         # Check if object were created
         try:
@@ -465,7 +465,7 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         }
         response = self.client.post(reverse("comp_new"), data=form_data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["error"], "Invalid perfomance indicator.")
+        self.assertEqual(response.json()["message"], "Invalid perfomance indicator.")
 
         # Check if object were created
         try:
@@ -484,7 +484,7 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         response = self.client.post(reverse("comp_new"), data=form_data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
-            response.json()["error"], "Invalid data point data. Wrong parameters."
+            response.json()["message"], "Invalid data point data. Wrong parameters."
         )
 
         # Check if object were created
@@ -510,7 +510,7 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         self.assertEqual(1, 1)
         response = self.client.post(reverse("edit"), data=form_data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["error"], "Must be logged in.")
+        self.assertEqual(response.json()["message"], "Must be logged in.")
 
         new = PerformanceIndicator.objects.get(id=current_id)
 
@@ -537,7 +537,7 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         self.assertEqual(1, 1)
         response = self.client.get(reverse("edit"), data=form_data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["error"], "POST request required.")
+        self.assertEqual(response.json()["message"], "POST request required.")
 
         new = PerformanceIndicator.objects.get(id=current_id)
 
@@ -565,7 +565,7 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         response = self.client.post(reverse("edit"), data=form_data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
-            response.json()["error"],
+            response.json()["message"],
             "Could not find a Perfomance indicator with the specified ID and user.",
         )
 
@@ -595,7 +595,7 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         response = self.client.post(reverse("edit"), data=form_data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
-            response.json()["error"], "Invalid performance indicator data."
+            response.json()["message"], "Invalid performance indicator data."
         )
 
         new = PerformanceIndicator.objects.get(id=current_id)
@@ -624,7 +624,7 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         response = self.client.post(reverse("edit"), data=form_data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
-            response.json()["error"],
+            response.json()["message"],
             "Could not find a Perfomance indicator with the specified ID and user.",
         )
 
@@ -649,7 +649,7 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         }
         response = self.client.post(reverse("comp_edit"), data=form_data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["error"], "Must be logged in.")
+        self.assertEqual(response.json()["message"], "Must be logged in.")
 
         new = DataPoint.objects.get(id=current_id)
 
