@@ -381,6 +381,9 @@ def delete(request):
 
 
 def comp_delete(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"message": "Must be logged in."}, status=400)
+
     if request.method == "POST":
         try:
             # Get data from request
@@ -395,6 +398,13 @@ def comp_delete(request):
             return JsonResponse({"message": "Invalid user."}, staus=400)
 
         try:
+            data_point = DataPoint.objects.get(id=data["item"])
+            perf_indicator = data_point.score_table
+            data_point_user = perf_indicator.user
+
+            if data_point_user != user:
+                raise DataPoint.DoesNotExist()
+
             # Edit data point
             data_point = DataPoint.objects.get(id=data["item"])
 
@@ -402,7 +412,14 @@ def comp_delete(request):
             data_point.delete()
         except KeyError:
             return JsonResponse(
-                {"message": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data point data. Wrong parameters."}, status=400
+            )
+        except DataPoint.DoesNotExist:
+            return JsonResponse(
+                {
+                    "message": "Could not find a datapoint with the specified id and user."
+                },
+                status=400,
             )
 
         return JsonResponse({"message": "DataPoint deleted successfully."}, status=200)

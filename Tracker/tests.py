@@ -864,5 +864,90 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         except:
             self.fail("Object was deleted")
 
+    # Delete DataPoint tests
+    def testDeleteDataPointFormNotAuth(self):
+        test_object = DataPoint.objects.create(score_table=self.perf_ind1, score=4)
+        object_id = test_object.id
+
+        # Form data
+        form_data = {
+            "item": object_id,
+        }
+        response = self.client.post(reverse("comp_delete"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "Must be logged in.")
+
+        # Check if object
+        try:
+            DataPoint.objects.get(id=object_id)  # Throws error if not exist
+            self.assertTrue(True)
+        except:
+            self.fail("Object was deleted")
+
+    def testDeleteDataPointFormNotPost(self):
+        test_object = DataPoint.objects.create(score_table=self.perf_ind1, score=4)
+        object_id = test_object.id
+
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "item": object_id,
+        }
+        response = self.client.get(reverse("comp_delete"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "POST request required.")
+
+        # Check if object
+        try:
+            DataPoint.objects.get(id=object_id)  # Throws error if not exist
+            self.assertTrue(True)
+        except:
+            self.fail("Object was deleted")
+
+    def testDeleteDataPointFormWrongItem(self):
+        test_object = DataPoint.objects.create(score_table=self.perf_ind1, score=4)
+        object_id = test_object.id
+
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "wrong_item": object_id,
+        }
+        response = self.client.post(reverse("comp_delete"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["message"], "Invalid data point data. Wrong parameters."
+        )
+
+        # Check if object
+        try:
+            DataPoint.objects.get(id=object_id)  # Throws error if not exist
+            self.assertTrue(True)
+        except:
+            self.fail("Object was deleted")
+
+    def testDeleteDataPointFormWrongUser(self):
+        test_object = DataPoint.objects.create(score_table=self.perf_ind1, score=4)
+        object_id = test_object.id
+
+        self.client.login(username="user2", password="password2")
+        # Form data
+        form_data = {
+            "item": object_id,
+        }
+        response = self.client.post(reverse("comp_delete"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["message"],
+            "Could not find a datapoint with the specified id and user.",
+        )
+
+        # Check if object
+        try:
+            DataPoint.objects.get(id=object_id)  # Throws error if not exist
+            self.assertTrue(True)
+        except:
+            self.fail("Object was deleted")
+
 
 class UserEditTests(TrackerTestCase): ...
