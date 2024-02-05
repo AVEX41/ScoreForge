@@ -363,6 +363,11 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         favourites = PerformanceIndicator.objects.filter(user_favourite=True)
         self.assertEqual(len(favourites), 1)
 
+        # Check if it the correct object id
+        self.assertEqual(
+            self.perf_ind2.id, PerformanceIndicator.objects.get(user_favourite=True).id
+        )
+
     # ---- Negative path testing ----
     # New Performance indicator form
     def testNewPerfIndFormNotAuth(self):
@@ -948,6 +953,43 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
             self.assertTrue(True)
         except:
             self.fail("Object was deleted")
+
+    # Index Favourite tests
+    def testFormIndexFavouriteNotAuth(self):
+        # Form data
+        form_data = {"perf_id": self.perf_ind2.id}
+        response = self.client.post(reverse("indexFav"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "Must be logged in.")
+
+    def testFormIndexFavouriteNotPost(self):
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {"perf_id": self.perf_ind2.id}
+        response = self.client.get(reverse("indexFav"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "POST request required.")
+
+    def testFormIndexFavouriteWrongParam(self):
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {"wrong_perf_id": self.perf_ind2.id}
+        response = self.client.post(reverse("indexFav"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["message"], "Invalid data point data. Wrong parameters."
+        )
+
+    def testFormIndexFavouriteWrongUser(self):
+        self.client.login(username="user2", password="password2")
+        # Form data
+        form_data = {"perf_id": self.perf_ind2.id}
+        response = self.client.post(reverse("indexFav"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["message"],
+            "Did not find a performance indicator with the specified user and id.",
+        )
 
 
 class UserEditTests(TrackerTestCase): ...

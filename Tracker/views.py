@@ -429,7 +429,7 @@ def comp_delete(request):
 
 def indexFav(request):
     if not request.user.is_authenticated:
-        return JsonResponse({"message": "Must be logged in"}, status=400)
+        return JsonResponse({"message": "Must be logged in."}, status=400)
 
     if request.method == "POST":
         try:
@@ -457,8 +457,16 @@ def indexFav(request):
             user.save()
         except KeyError:
             return JsonResponse(
-                {"message": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data point data. Wrong parameters."}, status=400
             )
+        except PerformanceIndicator.DoesNotExist:
+            return JsonResponse(
+                {
+                    "message": "Did not find a performance indicator with the specified user and id."
+                },
+                status=400,
+            )
+
         return JsonResponse({"message": "Favourite edited successfully."}, status=200)
     else:
         return JsonResponse({"message": "POST request required."}, status=400)
