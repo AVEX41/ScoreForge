@@ -658,5 +658,106 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         self.assertEqual(new.score_table, old.score_table)  # owner of object
         self.assertEqual(new.score, old.score)  # score of objects
 
+    def testEditDataPointFormNotPost(self):
+        current_id = self.datap3.id
+        # Old object
+        old = DataPoint.objects.get(id=current_id)
+
+        self.client.login(username="user1", password="password1")
+
+        # Form data
+        form_data = {
+            "submit_type": current_id,
+            "score": 20,
+        }
+        response = self.client.get(reverse("comp_edit"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "POST request required.")
+
+        new = DataPoint.objects.get(id=current_id)
+
+        # Assertions: object
+        self.assertEqual(new.id, old.id)  # id of object
+        self.assertEqual(new.score_table, old.score_table)  # owner of object
+        self.assertEqual(new.score, old.score)  # score of objects
+
+    def testEditDataPointFormWrongSubmitType(self):
+        current_id = self.datap3.id
+        # Old object
+        old = DataPoint.objects.get(id=current_id)
+
+        self.client.login(username="user1", password="password1")
+
+        # Form data
+        form_data = {
+            "wrong_submit_type": current_id,
+            "score": 20,
+        }
+        response = self.client.post(reverse("comp_edit"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["message"],
+            "Invalid data point data. Wrong parameters.",
+        )
+
+        new = DataPoint.objects.get(id=current_id)
+
+        # Assertions: object
+        self.assertEqual(new.id, old.id)  # id of object
+        self.assertEqual(new.score_table, old.score_table)  # owner of object
+        self.assertEqual(new.score, old.score)  # score of objects
+
+    def testEditDataPointFormWrongScore(self):
+        current_id = self.datap3.id
+        # Old object
+        old = DataPoint.objects.get(id=current_id)
+
+        self.client.login(username="user1", password="password1")
+
+        # Form data
+        form_data = {
+            "submit_type": current_id,
+            "wrong_score": 20,
+        }
+        response = self.client.post(reverse("comp_edit"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["message"],
+            "Invalid data point data. Wrong parameters.",
+        )
+
+        new = DataPoint.objects.get(id=current_id)
+
+        # Assertions: object
+        self.assertEqual(new.id, old.id)  # id of object
+        self.assertEqual(new.score_table, old.score_table)  # owner of object
+        self.assertEqual(new.score, old.score)  # score of objects
+
+    def testEditDataPointFormWrongUser(self):
+        current_id = self.datap3.id
+        # Old object
+        old = DataPoint.objects.get(id=current_id)
+
+        self.client.login(username="user2", password="password2")
+
+        # Form data
+        form_data = {
+            "submit_type": current_id,
+            "score": 20,
+        }
+        response = self.client.post(reverse("comp_edit"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["message"],
+            "Could not find a datapoint with the specified id and user.",
+        )
+
+        new = DataPoint.objects.get(id=current_id)
+
+        # Assertions: object
+        self.assertEqual(new.id, old.id)  # id of object
+        self.assertEqual(new.score_table, old.score_table)  # owner of object
+        self.assertEqual(new.score, old.score)  # score of objects
+
 
 class UserEditTests(TrackerTestCase): ...

@@ -317,12 +317,12 @@ def comp_edit(request):
             data_point.save()
         except KeyError:
             return JsonResponse(
-                {"message": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data point data. Wrong parameters."}, status=400
             )
         except DataPoint.DoesNotExist:
             return JsonResponse(
                 {
-                    "message": "Could not find a datapoint with the specified id and user"
+                    "message": "Could not find a datapoint with the specified id and user."
                 },
                 status=400,
             )
