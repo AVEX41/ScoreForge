@@ -759,5 +759,110 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         self.assertEqual(new.score_table, old.score_table)  # owner of object
         self.assertEqual(new.score, old.score)  # score of objects
 
+    # Delete Performance indicator tests
+    def testDeletePerfIndFormNotAuth(self):
+        test_object = PerformanceIndicator.objects.create(
+            user=self.user1,
+            name="perf_ind6",
+            description="Description6",
+            user_favourite=False,
+        )
+        object_id = test_object.id
+
+        # Form data
+        form_data = {
+            "item": object_id,
+        }
+        response = self.client.post(reverse("delete"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "Must be logged in.")
+
+        # Check if object
+        try:
+            PerformanceIndicator.objects.get(id=object_id)  # Throws error
+            self.assertTrue(True)
+        except:
+            self.fail("Object was deleted")
+
+    def testDeletePerfIndFormNotPost(self):
+        test_object = PerformanceIndicator.objects.create(
+            user=self.user1,
+            name="perf_ind6",
+            description="Description6",
+            user_favourite=False,
+        )
+        object_id = test_object.id
+
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "item": object_id,
+        }
+        response = self.client.get(reverse("delete"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "POST request required.")
+
+        # Check if object
+        try:
+            PerformanceIndicator.objects.get(id=object_id)  # Throws error
+            self.assertTrue(True)
+        except:
+            self.fail("Object was deleted")
+
+    def testDeletePerfIndFormWrongItem(self):
+        test_object = PerformanceIndicator.objects.create(
+            user=self.user1,
+            name="perf_ind6",
+            description="Description6",
+            user_favourite=False,
+        )
+        object_id = test_object.id
+
+        self.client.login(username="user1", password="password1")
+        # Form data
+        form_data = {
+            "wrong_item": object_id,
+        }
+        response = self.client.post(reverse("delete"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["message"], "Invalid performance indicator data."
+        )
+
+        # Check if object
+        try:
+            PerformanceIndicator.objects.get(id=object_id)  # Throws error
+            self.assertTrue(True)
+        except:
+            self.fail("Object was deleted")
+
+    def testDeletePerfIndFormWrongUser(self):
+        test_object = PerformanceIndicator.objects.create(
+            user=self.user1,
+            name="perf_ind6",
+            description="Description6",
+            user_favourite=False,
+        )
+        object_id = test_object.id
+
+        self.client.login(username="user2", password="password2")
+        # Form data
+        form_data = {
+            "item": object_id,
+        }
+        response = self.client.post(reverse("delete"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["message"],
+            "Did not find a performance indicator with the specified user and id.",
+        )
+
+        # Check if object
+        try:
+            PerformanceIndicator.objects.get(id=object_id)  # Throws error
+            self.assertTrue(True)
+        except:
+            self.fail("Object was deleted")
+
 
 class UserEditTests(TrackerTestCase): ...

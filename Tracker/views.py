@@ -337,6 +337,9 @@ def comp_edit(request):
 
 
 def delete(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"message": "Must be logged in."}, status=400)
+
     if request.method == "POST":
         try:
             # Get data from request
@@ -352,13 +355,22 @@ def delete(request):
 
         try:
             # Get object
-            performance_indicator = PerformanceIndicator.objects.get(id=data["item"])
+            performance_indicator = PerformanceIndicator.objects.get(
+                id=data["item"], user=user
+            )
 
             # delete
             performance_indicator.delete()
         except KeyError:
             return JsonResponse(
                 {"message": "Invalid performance indicator data."}, status=400
+            )
+        except PerformanceIndicator.DoesNotExist:
+            return JsonResponse(
+                {
+                    "message": "Did not find a performance indicator with the specified user and id."
+                },
+                status=400,
             )
 
         return JsonResponse(
