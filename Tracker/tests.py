@@ -1075,7 +1075,182 @@ class UserEditTests(TrackerTestCase):
 
         self.assertEqual(form_data["email"], new)
 
-    def testFormEditPword(self): ...
+    def testFormEditPword(self):
+        self.client.login(username="user2", password="password2")
+        old = User.objects.get(id=self.user2.id).password
+        # Form data
+        form_data = {
+            "password": "password2_new",
+        }
+        response = self.client.post(reverse("usr_pword"), data=form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["message"], "User edited successfully.")
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).password
+
+        # Assertions
+        self.assertNotEqual(old, new)
 
     # ---- Negative path testing ----
-    ...
+    # Edit user's name tests
+    def testFormEditNameNotAuth(self):
+        old = {
+            "first_name": User.objects.get(id=self.user2.id).first_name,
+            "last_name": User.objects.get(id=self.user2.id).last_name,
+        }
+        # Form data
+        form_data = {
+            "first_name": "user_first2_new",
+            "last_name": "user_last2_new",
+        }
+        response = self.client.post(reverse("usr_name"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "Must be logged in.")
+
+        # Check if name was changed
+        new = {
+            "first_name": User.objects.get(id=self.user2.id).first_name,
+            "last_name": User.objects.get(id=self.user2.id).last_name,
+        }
+
+        # Assertions
+        self.assertEqual(old["first_name"], new["first_name"])
+        self.assertEqual(old["last_name"], new["last_name"])
+
+        self.assertNotEqual(form_data["first_name"], new["first_name"])
+        self.assertNotEqual(form_data["last_name"], new["last_name"])
+
+    def testFormEditNameNotPost(self):
+        self.client.login(username="user2", password="password2")
+        old = {
+            "first_name": User.objects.get(id=self.user2.id).first_name,
+            "last_name": User.objects.get(id=self.user2.id).last_name,
+        }
+        # Form data
+        form_data = {
+            "first_name": "user_first2_new",
+            "last_name": "user_last2_new",
+        }
+        response = self.client.get(reverse("usr_name"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "POST request required.")
+
+        # Check if name was changed
+        new = {
+            "first_name": User.objects.get(id=self.user2.id).first_name,
+            "last_name": User.objects.get(id=self.user2.id).last_name,
+        }
+
+        # Assertions
+        self.assertEqual(old["first_name"], new["first_name"])
+        self.assertEqual(old["last_name"], new["last_name"])
+
+        self.assertNotEqual(form_data["first_name"], new["first_name"])
+        self.assertNotEqual(form_data["last_name"], new["last_name"])
+
+    def testFormEditNameWrongParam(self):
+        self.client.login(username="user2", password="password2")
+        old = {
+            "first_name": User.objects.get(id=self.user2.id).first_name,
+            "last_name": User.objects.get(id=self.user2.id).last_name,
+        }
+        # Form data
+        form_data = {
+            "wrong_first_name": "user_first2_new",
+            "wrong_last_name": "user_last2_new",
+        }
+        response = self.client.post(reverse("usr_name"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "Invalid data. Wrong parameters.")
+
+        # Check if name was changed
+        new = {
+            "first_name": User.objects.get(id=self.user2.id).first_name,
+            "last_name": User.objects.get(id=self.user2.id).last_name,
+        }
+
+        # Assertions
+        self.assertEqual(old["first_name"], new["first_name"])
+        self.assertEqual(old["last_name"], new["last_name"])
+
+        self.assertNotEqual(form_data["wrong_first_name"], new["first_name"])
+        self.assertNotEqual(form_data["wrong_last_name"], new["last_name"])
+
+    # Edit user's user name
+    def testFormEditUsernameNotAuth(self):
+        old = User.objects.get(id=self.user2.id).username
+        # Form data
+        form_data = {
+            "user_name": "user2_new",
+        }
+        response = self.client.post(reverse("usr_usrname"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "Must be logged in.")
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).username
+
+        # Assertions
+        self.assertEqual(old, new)
+
+        self.assertNotEqual(form_data["user_name"], new)
+
+    def testFormEditUsernameNotPost(self):
+        self.client.login(username="user2", password="password2")
+        old = User.objects.get(id=self.user2.id).username
+        # Form data
+        form_data = {
+            "user_name": "user2_new",
+        }
+        response = self.client.get(reverse("usr_usrname"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "POST request required.")
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).username
+
+        # Assertions
+        self.assertEqual(old, new)
+
+        self.assertNotEqual(form_data["user_name"], new)
+
+    def testFormEditUsernameWrongParams(self):
+        self.client.login(username="user2", password="password2")
+        old = User.objects.get(id=self.user2.id).username
+        # Form data
+        form_data = {
+            "wrong_user_name": "user2_new",
+        }
+        response = self.client.post(reverse("usr_usrname"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "Invalid data. Wrong parameters.")
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).username
+
+        # Assertions
+        self.assertEqual(old, new)
+
+        self.assertNotEqual(form_data["wrong_user_name"], new)
+
+    def testFormEditUsernameAlreadyExist(self):
+        self.client.login(username="user2", password="password2")
+        old = User.objects.get(id=self.user2.id).username
+        # Form data
+        form_data = {
+            "user_name": "user1",
+        }
+        response = self.client.post(reverse("usr_usrname"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "Username already taken.")
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).username
+
+        # Assertions
+        self.assertEqual(old, new)
+
+        self.assertNotEqual(form_data["user_name"], new)
+
+    # Edit user's email

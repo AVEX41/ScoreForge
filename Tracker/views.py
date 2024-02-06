@@ -473,6 +473,9 @@ def indexFav(request):
 
 
 def usr_name(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"message": "Must be logged in."}, status=400)
+
     if request.method == "POST":
         try:
             # Get data from request
@@ -491,7 +494,7 @@ def usr_name(request):
             user.save()
         except KeyError:
             return JsonResponse(
-                {"message": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data. Wrong parameters."}, status=400
             )
         return JsonResponse({"message": "User edited successfully."}, status=200)
     else:
@@ -499,31 +502,53 @@ def usr_name(request):
 
 
 def usr_usrname(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"message": "Must be logged in."}, status=400)
+
     if request.method == "POST":
         try:
             # Get data from request
             data = request.POST
         except KeyError:
             return JsonResponse({"message": "Invalid data."}, status=400)
+
         try:
             # Get user
             user = request.user
         except KeyError:
             return JsonResponse({"message": "Invalid user."}, staus=400)
+
+        try:
+            if User.objects.filter(username=data["user_name"]).exists():
+                return JsonResponse({"message": "Username already taken."}, status=400)
+        except KeyError:
+            return JsonResponse(
+                {"message": "Invalid data. Wrong parameters."}, status=400
+            )
+        except:
+            return JsonResponse({"message": "Username already taken."}, status=400)
+
         try:
             user.username = data["user_name"]
 
             user.save()
         except KeyError:
             return JsonResponse(
-                {"message": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data. Wrong parameters."}, status=400
             )
+        except:
+            return JsonResponse({"message": "Username already taken."}, status=400)
+
         return JsonResponse({"message": "User edited successfully."}, status=200)
+
     else:
         return JsonResponse({"message": "POST request required."}, status=400)
 
 
 def usr_email(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"message": "Must be logged in."}, status=400)
+
     if request.method == "POST":
         try:
             # Get data from request
@@ -549,6 +574,9 @@ def usr_email(request):
 
 
 def usr_pword(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"message": "Must be logged in."}, status=400)
+
     if request.method == "POST":
         try:
             # Get data from request
