@@ -7,11 +7,26 @@ from .models import User, PerformanceIndicator, DataPoint
 class TrackerTestCase(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(
-            username="user1", password="password1"
+            username="user1",
+            password="password1",
+            first_name="user_first1",
+            last_name="user_last1",
+            email="user1@example.com",
         )  # user 1
         self.user2 = User.objects.create_user(
-            username="user2", password="password2"
+            username="user2",
+            password="password2",
+            first_name="user_first2",
+            last_name="user_last2",
+            email="user2@example.com",
         )  # user 2
+        self.user3 = User.objects.create_user(
+            username="user3",
+            password="password3",
+            first_name="user_first3",
+            last_name="user_last3",
+            email="user3@example.com",
+        )  # user 3
         self.perf_ind1 = PerformanceIndicator.objects.create(  # perfomance indicator 1
             user=self.user1,
             name="perf_ind1",
@@ -992,4 +1007,75 @@ class FormTests(TrackerTestCase):  # Tests for the form routes
         )
 
 
-class UserEditTests(TrackerTestCase): ...
+class UserEditTests(TrackerTestCase):
+    # ---- Happy path testing ----
+    def testFormEditName(self):
+        self.client.login(username="user2", password="password2")
+        old = {
+            "first_name": User.objects.get(id=self.user2.id).first_name,
+            "last_name": User.objects.get(id=self.user2.id).last_name,
+        }
+        # Form data
+        form_data = {
+            "first_name": "user_first2_new",
+            "last_name": "user_last2_new",
+        }
+        response = self.client.post(reverse("usr_name"), data=form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["message"], "User edited successfully.")
+
+        # Check if name was changed
+        new = {
+            "first_name": User.objects.get(id=self.user2.id).first_name,
+            "last_name": User.objects.get(id=self.user2.id).last_name,
+        }
+
+        # Assertions
+        self.assertNotEqual(old["first_name"], new["first_name"])
+        self.assertNotEqual(old["last_name"], new["last_name"])
+
+        self.assertEqual(form_data["first_name"], new["first_name"])
+        self.assertEqual(form_data["last_name"], new["last_name"])
+
+    def testFormEditUsername(self):
+        self.client.login(username="user2", password="password2")
+        old = User.objects.get(id=self.user2.id).username
+        # Form data
+        form_data = {
+            "user_name": "user2_new",
+        }
+        response = self.client.post(reverse("usr_usrname"), data=form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["message"], "User edited successfully.")
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).username
+
+        # Assertions
+        self.assertNotEqual(old, new)
+
+        self.assertEqual(form_data["user_name"], new)
+
+    def testFormEditEmail(self):
+        self.client.login(username="user2", password="password2")
+        old = User.objects.get(id=self.user2.id).email
+        # Form data
+        form_data = {
+            "email": "user2_new@example.com",
+        }
+        response = self.client.post(reverse("usr_email"), data=form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["message"], "User edited successfully.")
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).email
+
+        # Assertions
+        self.assertNotEqual(old, new)
+
+        self.assertEqual(form_data["email"], new)
+
+    def testFormEditPword(self): ...
+
+    # ---- Negative path testing ----
+    ...
