@@ -556,17 +556,22 @@ def usr_email(request):
         except KeyError:
             return JsonResponse({"message": "Invalid data."}, status=400)
         try:
+
             # Get user
             user = request.user
         except KeyError:
             return JsonResponse({"message": "Invalid user."}, staus=400)
         try:
+            # Check if already in use
+            if User.objects.filter(email=data["email"]).exists():
+                return JsonResponse({"message": "Email already in use."}, status=400)
+
             user.email = data["email"]
 
             user.save()
         except KeyError:
             return JsonResponse(
-                {"message": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data point data. Wrong parameters."}, status=400
             )
         return JsonResponse({"message": "User edited successfully."}, status=200)
     else:
@@ -594,7 +599,7 @@ def usr_pword(request):
             user.save()
         except KeyError:
             return JsonResponse(
-                {"message": "Invalid data point data. Wrong parameters"}, status=400
+                {"message": "Invalid data point data. Wrong parameters."}, status=400
             )
         return JsonResponse({"message": "User edited successfully."}, status=200)
     else:

@@ -64,6 +64,10 @@ class TrackerTestCase(TestCase):
 
 
 class HTMLresponseTests(TrackerTestCase):  # Tests for HTML responses
+    def testApplicationStarts(self):
+        response = self.client.get(reverse("login"))
+        self.assertEqual(response.status_code, 200)
+
     def testUserHasLoggedIn(self):
         self.client.login(username="user1", password="password1")
         response = self.client.get(reverse("index"))
@@ -1254,3 +1258,134 @@ class UserEditTests(TrackerTestCase):
         self.assertNotEqual(form_data["user_name"], new)
 
     # Edit user's email
+    def testFormEditEmailNotAuth(self):
+        # self.client.login(username="user2", password="password2")
+        old = User.objects.get(id=self.user2.id).email
+        # Form data
+        form_data = {
+            "email": "user2_new@example.com",
+        }
+        response = self.client.post(reverse("usr_email"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "Must be logged in.")
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).email
+
+        # Assertions
+        self.assertEqual(old, new)
+
+        self.assertNotEqual(form_data["email"], new)
+
+    def testFormEditEmailNotPost(self):
+        self.client.login(username="user2", password="password2")
+        old = User.objects.get(id=self.user2.id).email
+        # Form data
+        form_data = {
+            "email": "user2_new@example.com",
+        }
+        response = self.client.get(reverse("usr_email"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "POST request required.")
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).email
+
+        # Assertions
+        self.assertEqual(old, new)
+
+        self.assertNotEqual(form_data["email"], new)
+
+    def testFormEditEmailWrongParams(self):
+        self.client.login(username="user2", password="password2")
+        old = User.objects.get(id=self.user2.id).email
+        # Form data
+        form_data = {
+            "wrong_email": "user2_new@example.com",
+        }
+        response = self.client.post(reverse("usr_email"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["message"], "Invalid data point data. Wrong parameters."
+        )
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).email
+
+        # Assertions
+        self.assertEqual(old, new)
+
+        self.assertNotEqual(form_data["wrong_email"], new)
+
+    def testFormEditEmailAlreadyInUse(self):
+        self.client.login(username="user2", password="password2")
+        old = User.objects.get(id=self.user2.id).email
+        # Form data
+        form_data = {
+            "email": "user1@example.com",
+        }
+        response = self.client.post(reverse("usr_email"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "Email already in use.")
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).email
+
+        # Assertions
+        self.assertEqual(old, new)
+
+        self.assertNotEqual(form_data["email"], new)
+
+    # Edit user's password
+    def testFormEditPwordNotAuth(self):
+        # self.client.login(username="user2", password="password2")
+        old = User.objects.get(id=self.user2.id).password
+        # Form data
+        form_data = {
+            "password": "password2_new",
+        }
+        response = self.client.post(reverse("usr_pword"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "Must be logged in.")
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).password
+
+        # Assertions
+        self.assertEqual(old, new)
+
+    def testFormEditPwordNotPost(self):
+        self.client.login(username="user2", password="password2")
+        old = User.objects.get(id=self.user2.id).password
+        # Form data
+        form_data = {
+            "password": "password2_new",
+        }
+        response = self.client.get(reverse("usr_pword"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["message"], "POST request required.")
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).password
+
+        # Assertions
+        self.assertEqual(old, new)
+
+    def testFormEditPwordWrongParams(self):
+        self.client.login(username="user2", password="password2")
+        old = User.objects.get(id=self.user2.id).password
+        # Form data
+        form_data = {
+            "wrong_password": "password2_new",
+        }
+        response = self.client.post(reverse("usr_pword"), data=form_data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json()["message"], "Invalid data point data. Wrong parameters."
+        )
+
+        # Check if name was changed
+        new = User.objects.get(id=self.user2.id).password
+
+        # Assertions
+        self.assertEqual(old, new)
