@@ -22,11 +22,10 @@ function comp_view(row) {
             old_table.parentNode.replaceChild(table, old_table);
 
             // Headers of table
-            let headers = ["score", "timestamp", "edit", "delete"];
+            let headers = ["score", "edit", "delete"];
 
             // clear table
             table.innerHTML = "";
-            console.log(data)
 
             // add data to table
             data.data_points.forEach((competition, index) => {

@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // adding event listeners to buttons
     document.getElementById("dashboard-side-button").addEventListener("click", function () {showPage("dashboard");});
     document.getElementById("manage-side-button").addEventListener("click", function () {showManage()});
-    document.getElementById("profile-side-button").addEventListener("click", function () {showPage("profile"); profile_show_main});
+    document.getElementById("profile-side-button").addEventListener("click", function () {showPage("profile"); hideEditForms()});
 
     showPage("dashboard");
 });
