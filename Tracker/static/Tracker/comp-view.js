@@ -121,6 +121,8 @@ function comp_view(row) {
                         if (response.ok) {
                             // Handle the successful response here
                             console.log("delete successfull");
+                            fetchCompData();
+                            showMessage("success", "Data point deleted successfully.");
                         } else {
                             // Handle the error response here
                             console.error("Deletion returned with status: " + response.status);

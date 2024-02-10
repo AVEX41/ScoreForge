@@ -134,7 +134,7 @@ The manage.js file is used to handle the logic for the manage page, the page whe
 
 #### messages.js
 
-The messages.js file is used to handle the logic for the messages that are displayed when some error happens.
+The messages.js file is used to handle the logic for the messages that are displayed when some error happens or a form submission is returned.
 
 #### new.js
 

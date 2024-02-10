@@ -33,6 +33,8 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 // Handle the successful response here
                 comp_view(formData.get("competition_type"));
+                message = (is_new) ? "Data point created successfully." : "Data point created successfully.";
+                showMessage("success", message);
             } else {
                 console.error("Form submission failed with status: " + response.status);
                 // Handle the error response here

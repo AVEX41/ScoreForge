@@ -36,6 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 // Handle the successful response here
                 showManage();
+                message = (is_new) ? "Performance indicator created successfully." : "Performance indicator created successfully.";
+                showMessage("success", message);
+
             } else {
                 console.error("Form submission failed with status: " + response.status);
                 // Handle the error response here
@@ -73,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 // Handle the successful response here
                 showManage();
+                showMessage("success", "Perfomance indicator deleted successfully.");
             } else {
                 console.error("Form submission failed with status: " + response.status);
                 // Handle the error response here
