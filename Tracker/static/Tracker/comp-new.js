@@ -34,9 +34,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Handle the successful response here
                 comp_view(formData.get("competition_type"));
             } else {
-                // Handle the error response here
                 console.error("Form submission failed with status: " + response.status);
+                // Handle the error response here
+                return response.json();
+
             }
+        })
+        .then(data => {
+            showMessage("danger", data.message);
+            
         })
         .catch(error => {
             // Handle network errors here

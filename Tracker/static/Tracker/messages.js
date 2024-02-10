@@ -1,4 +1,4 @@
-function ShowMessage(type, content) {
+function showMessage(type, content) {
    // Create the alert div element
     var alertDiv = document.createElement("div");
     alertDiv.classList.add("alert", "alert-" + type, "alert-dismissible", "fade", "show");

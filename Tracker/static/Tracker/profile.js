@@ -24,7 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     successCallback(formData);
                 } else {
                     console.error("Form submission failed with status: " + response.status);
+                    // Handle the error response here
+                    return response.json();
                 }
+            })
+            .then(data => {
+                showMessage("danger", data.message);
             })
             .catch(error => {
                 console.error("Network error occurred while submitting the form:", error);
