@@ -1,5 +1,7 @@
 # ScoreForge
 
+# How to run
+
 ## first time
 
 ```bash
@@ -25,34 +27,16 @@ docker-compose up -d --build
 docker-compose down
 ```
 
-## Idea
+# General Information
 
--   Single page application
--   user login and get a "admin dashboard"
--   app where users can create personalized competitions, whether based on grades or other metrics, to track and measure their progress over time, promoting continuous improvement.
+## Backend
 
-#### dashboard
+The backend is powered by Django, a python web framework, and PostgreSQL. This application is designed as a Single Page Application. The backend utilizes Django's models to store data in a PostgreSQL database, and uses Django's http to communicate with the frontend using JSON response. The backend also uses Django's authentication system to authenticate users.
 
--   shows the favourite performance-tracker. (Competition)
--   own widget that shows change in score of favourite from last time.
--   button to manage the favourited scoreTable's data.
--   navigation bar button to manage scoreTables.
+## Frontend
 
-#### manage scoreTables
+The frontend is powered by HTML, CSS, and JavaScript. It uses bootstrap and adminkit to make the frontend look good and mobile responsive.
 
--   shows all the scoreTables in a table.
-    -   each row is a scoreTable.
-    -   each row has a button to manage the specific scoreTable's data.
+# Distinctiveness and Complexity
 
-##### styling
-
--   navbar on left (if on wider device).
--   else on top.
--   blue themed.
-
-#### ScoreTable data
-
--   when clicked on a specific ScoreTable:
-    -   show a loading page.
-    -   page should fetch a JSON to get information about the performance.
-    -   shows a graph, that shows all the perfomances.
+This project is focused on tracking performance in some kind of score. It does not match the idea of a social network or e-commerce site because; in this application, the user stores information about their performance in a game or sport (or anything other represented in numbers), to store their information for the sole purpose of seeing if they are improving or not. The complexity of this project is greatly increased by the fact that it is a Single Page Application, and relies on a lot of JavaScript interpereting the data from the backend, and displaying it in a way that is easy to understand and use.
