@@ -1,23 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const hideEditForms = () => {
-        document.querySelectorAll(".edit-form").forEach(element => {
-            element.style.display = "none";
-        });
-        document.querySelectorAll(".profile-main").forEach(element => {
-            element.style.display = "block";
-        });
-    };
 
-    const showEditForms = () => {
-        document.querySelectorAll(".edit-form").forEach(element => {
-            element.style.display = "block";
-        });
-        document.querySelectorAll(".profile-main").forEach(element => {
-            element.style.display = "none";
-        });
-
-        // add data to input
-    };
 
     const showMainProfile = () => {
         hideEditForms();
@@ -42,7 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     successCallback(formData);
                 } else {
                     console.error("Form submission failed with status: " + response.status);
+                    // Handle the error response here
+                    return response.json();
                 }
+            })
+            .then(data => {
+                showMessage("danger", data.message);
             })
             .catch(error => {
                 console.error("Network error occurred while submitting the form:", error);
@@ -97,6 +84,26 @@ document.addEventListener("DOMContentLoaded", () => {
     handleFormSubmission(document.getElementById("profile-password-edit-form"), "form/edit/usr/pword", handlePasswordFormSubmission);
 
 });
+
+const hideEditForms = () => {
+    document.querySelectorAll(".edit-form").forEach(element => {
+        element.style.display = "none";
+    });
+    document.querySelectorAll(".profile-main").forEach(element => {
+        element.style.display = "block";
+    });
+};
+
+const showEditForms = () => {
+    document.querySelectorAll(".edit-form").forEach(element => {
+        element.style.display = "block";
+    });
+    document.querySelectorAll(".profile-main").forEach(element => {
+        element.style.display = "none";
+    });
+
+    // add data to input
+};
 
 function profile_show_form() {
     // show correct bunch

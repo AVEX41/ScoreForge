@@ -11,7 +11,16 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - name: Build the Docker image
-              run: docker-compose up --build -d
+              run: docker compose up -d --build
+
+            - name: Wait for DB
+              run: sleep 10 # Wait for the database to start up
+
+            - name: Make Migrations
+              run: docker-compose run web python3 manage.py makemigrations
+
+            - name: Migrate
+              run: docker-compose run web python3 manage.py migrate
 
             - name: Run tests
               run: docker-compose run web python3 manage.py test
