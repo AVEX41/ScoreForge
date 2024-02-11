@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const handleNameFormSubmission = (formData) => {
         console.log("name form submitted successfully");
 
+        showMessage("success", "Name edited successfully.");
+
         document.getElementById("profile-first-name").innerHTML = formData.get("first_name");
         document.getElementById("profile-last-name").innerHTML = formData.get("last_name");
 
@@ -49,6 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const handleEmailFormSubmission = (formData) => {
         console.log("email form submitted successfully");
 
+        showMessage("success", "Email edited successfully.");
+
         document.getElementById("profile-email").innerHTML = formData.get("email");
 
         showMainProfile();
@@ -57,6 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const handleUserNameFormSubmission = (formData) => {
         console.log("username form submitted successfully");
 
+        showMessage("success", "username edited successfully.");
+
         document.getElementById("profile-user-name").innerHTML = formData.get("user_name");
 
         showMainProfile();
@@ -64,6 +70,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const handlePasswordFormSubmission = () => {
         console.log("pword form submitted successfully");
+
+        showMessage("success", "Password edited successfully.");
 
         showMainProfile();
     };
