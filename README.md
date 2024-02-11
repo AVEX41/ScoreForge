@@ -24,6 +24,8 @@ docker-compose exec web python3 manage.py createsuperuser
 docker-compose up -d --build
 ```
 
+Then visit http://0.0.0.0:8000/
+
 ## stop container
 
 ```bash
