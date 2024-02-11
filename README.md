@@ -33,6 +33,10 @@ docker-compose down
 
 # General Information
 
+## Introduction
+
+ScoreForge is a web application that allows users to track their performance in a game, sport, or anything else that can be represented in numbers. The user can create performance indicators, and then add data points to these indicators. The user can then view the data points in a table and a graph, to see if they are improving or not. The user can also view and edit their profile, and manage their performance indicators.
+
 ## Backend
 
 The backend is powered by Django, a python web framework, and PostgreSQL. This application is designed as a Single Page Application. The backend utilizes Django's models to store data in a PostgreSQL database, and uses Django's http to communicate with the frontend using JSON response. The backend also uses Django's authentication system to authenticate users.
