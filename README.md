@@ -1,5 +1,9 @@
 # ScoreForge
 
+# Distinctiveness and Complexity
+
+This project is focused on tracking performance in some kind of score. It does not match the idea of a social network or e-commerce site because; in this application, the user stores information about their performance in a game or sport (or anything other represented in numbers), to store their information for the sole purpose of seeing if they are improving or not. The complexity of this project is greatly increased by the fact that it is a Single Page Application, and relies on a lot of JavaScript interpereting the data from the backend, and displaying it in a way that is easy to understand and use.
+
 # How to run
 
 ## first time
@@ -41,10 +45,6 @@ The frontend is powered by HTML, CSS, and JavaScript. It uses bootstrap and admi
 
 I started by building a minimal demo with basic features such as user authentication, The layout, and moving between pages. By then, the only model created was User, for the user authentication, so i continued by creating the rest of the models and their views.  
 After that the backend was mostly done, so i started working on the frontend. I wanted a modern looking and responsive design and got inspired by the modern dashboard design and found adminkit which was an exstension of bootstrap. I started by creating the manage page and all the subpages. Then I created the design of the comp-page with the graph and table which shows all the datapoints for a perfomance indicator. After that i added the profile page and the user edit page. after that i added the dashboard and user favourite feature.
-
-# Distinctiveness and Complexity
-
-This project is focused on tracking performance in some kind of score. It does not match the idea of a social network or e-commerce site because; in this application, the user stores information about their performance in a game or sport (or anything other represented in numbers), to store their information for the sole purpose of seeing if they are improving or not. The complexity of this project is greatly increased by the fact that it is a Single Page Application, and relies on a lot of JavaScript interpereting the data from the backend, and displaying it in a way that is easy to understand and use.
 
 # Files and Directories
 
